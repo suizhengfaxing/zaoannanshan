@@ -1,0 +1,537 @@
+.songti-title {
+    font-family: Tinos, "Hiragino Mincho ProN", "Source Han Serif", "Source Han Serif TC", "Noto Serif CJK", "Noto Serif TC", "Noto Serif SC", Songti, "LiSong Pro", "Apple LiSung", "新細明體", "新细明体", PMingLiU, "細明體", "细明体", MingLiU, HanaMinA, HanaMinB, HanaMinC, "Hanazono Mincho A", "Hanazono Mincho B", "Hanazono Mincho C", Jomolhari, serif;
+    font-style: normal !important;
+    font-weight: 700
+}
+
+.songti-body {
+    font-family: Tinos, "Hiragino Mincho ProN", "Source Han Serif", "Source Han Serif TC", "Noto Serif CJK", "Noto Serif TC", "Noto Serif SC", Songti, "LiSong Pro", "Apple LiSung", "新細明體", "新细明体", PMingLiU, "細明體", "细明体", MingLiU, HanaMinA, HanaMinB, HanaMinC, "Hanazono Mincho A", "Hanazono Mincho B", "Hanazono Mincho C", Jomolhari, serif;
+    font-style: normal !important;
+    font-weight: 400
+}
+
+.pu {
+    margin: 0 -4px
+}
+
+html.apple .pu {
+    font-family: "Source Han Serif", "Source Han Serif TC", "Noto Serif CJK", "Noto Serif TC", "Noto Serif SC", serif
+}
+
+.red-pattern {
+    background-color: #600;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='158' height='158' viewBox='0 0 200 200'%3E%3Cg fill='none' stroke='%23330000' stroke-width='2.5' stroke-opacity='0.14'%3E%3Crect x='-40' y='40' width='75' height='75'/%3E%3Crect x='-35' y='45' width='65' height='65'/%3E%3Crect x='-30' y='50' width='55' height='55'/%3E%3Crect x='-25' y='55' width='45' height='45'/%3E%3Crect x='-20' y='60' width='35' height='35'/%3E%3Crect x='-15' y='65' width='25' height='25'/%3E%3Crect x='-10' y='70' width='15' height='15'/%3E%3Crect x='-5' y='75' width='5' height='5'/%3E%3Crect width='35' height='35'/%3E%3Crect x='5' y='5' width='25' height='25'/%3E%3Crect x='10' y='10' width='15' height='15'/%3E%3Crect x='15' y='15' width='5' height='5'/%3E%3Crect x='40' width='75' height='75'/%3E%3Crect x='45' y='5' width='65' height='65'/%3E%3Crect x='50' y='10' width='55' height='55'/%3E%3Crect x='55' y='15' width='45' height='45'/%3E%3Crect x='60' y='20' width='35' height='35'/%3E%3Crect x='65' y='25' width='25' height='25'/%3E%3Crect x='70' y='30' width='15' height='15'/%3E%3Crect x='75' y='35' width='5' height='5'/%3E%3Crect x='40' y='80' width='35' height='35'/%3E%3Crect x='45' y='85' width='25' height='25'/%3E%3Crect x='50' y='90' width='15' height='15'/%3E%3Crect x='55' y='95' width='5' height='5'/%3E%3Crect x='120' y='-40' width='75' height='75'/%3E%3Crect x='125' y='-35' width='65' height='65'/%3E%3Crect x='130' y='-30' width='55' height='55'/%3E%3Crect x='135' y='-25' width='45' height='45'/%3E%3Crect x='140' y='-20' width='35' height='35'/%3E%3Crect x='145' y='-15' width='25' height='25'/%3E%3Crect x='150' y='-10' width='15' height='15'/%3E%3Crect x='155' y='-5' width='5' height='5'/%3E%3Crect x='120' y='40' width='35' height='35'/%3E%3Crect x='125' y='45' width='25' height='25'/%3E%3Crect x='130' y='50' width='15' height='15'/%3E%3Crect x='135' y='55' width='5' height='5'/%3E%3Crect y='120' width='75' height='75'/%3E%3Crect x='5' y='125' width='65' height='65'/%3E%3Crect x='10' y='130' width='55' height='55'/%3E%3Crect x='15' y='135' width='45' height='45'/%3E%3Crect x='20' y='140' width='35' height='35'/%3E%3Crect x='25' y='145' width='25' height='25'/%3E%3Crect x='30' y='150' width='15' height='15'/%3E%3Crect x='35' y='155' width='5' height='5'/%3E%3Crect x='200' y='120' width='75' height='75'/%3E%3Crect x='40' y='200' width='75' height='75'/%3E%3Crect x='80' y='80' width='75' height='75'/%3E%3Crect x='85' y='85' width='65' height='65'/%3E%3Crect x='90' y='90' width='55' height='55'/%3E%3Crect x='95' y='95' width='45' height='45'/%3E%3Crect x='100' y='100' width='35' height='35'/%3E%3Crect x='105' y='105' width='25' height='25'/%3E%3Crect x='110' y='110' width='15' height='15'/%3E%3Crect x='115' y='115' width='5' height='5'/%3E%3Crect x='80' y='160' width='35' height='35'/%3E%3Crect x='85' y='165' width='25' height='25'/%3E%3Crect x='90' y='170' width='15' height='15'/%3E%3Crect x='95' y='175' width='5' height='5'/%3E%3Crect x='120' y='160' width='75' height='75'/%3E%3Crect x='125' y='165' width='65' height='65'/%3E%3Crect x='130' y='170' width='55' height='55'/%3E%3Crect x='135' y='175' width='45' height='45'/%3E%3Crect x='140' y='180' width='35' height='35'/%3E%3Crect x='145' y='185' width='25' height='25'/%3E%3Crect x='150' y='190' width='15' height='15'/%3E%3Crect x='155' y='195' width='5' height='5'/%3E%3Crect x='160' y='40' width='75' height='75'/%3E%3Crect x='165' y='45' width='65' height='65'/%3E%3Crect x='170' y='50' width='55' height='55'/%3E%3Crect x='175' y='55' width='45' height='45'/%3E%3Crect x='180' y='60' width='35' height='35'/%3E%3Crect x='185' y='65' width='25' height='25'/%3E%3Crect x='190' y='70' width='15' height='15'/%3E%3Crect x='195' y='75' width='5' height='5'/%3E%3Crect x='160' y='120' width='35' height='35'/%3E%3Crect x='165' y='125' width='25' height='25'/%3E%3Crect x='170' y='130' width='15' height='15'/%3E%3Crect x='175' y='135' width='5' height='5'/%3E%3Crect x='200' y='200' width='35' height='35'/%3E%3Crect x='200' width='35' height='35'/%3E%3Crect y='200' width='35' height='35'/%3E%3C/g%3E%3C/svg%3E")
+}
+
+.paper-pattern {
+    background-color: #f5f5f5;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='30' viewBox='0 0 1000 120'%3E%3Cg fill='none' stroke='%23e8e8e8' stroke-width='1.2' stroke-opacity='0.94'%3E%3Cpath d='M-500 75c0 0 125-30 250-30S0 75 0 75s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 45c0 0 125-30 250-30S0 45 0 45s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 105c0 0 125-30 250-30S0 105 0 105s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 15c0 0 125-30 250-30S0 15 0 15s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500-15c0 0 125-30 250-30S0-15 0-15s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 135c0 0 125-30 250-30S0 135 0 135s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3C/g%3E%3C/svg%3E")
+}
+
+html {
+    scroll-behavior: smooth
+}
+
+body {
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans CJK", "Noto Sans TC", "Noto Sans SC", "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", PingFang, "微軟正黑體", "微软正黑体", "Microsoft JhengHei", "微軟雅黑", "微软雅黑", "Microsoft YaHei", sans-serif;
+    font-style: normal !important;
+    font-weight: 400;
+    color: #4f3c2e;
+    background-color: #f5f5f5;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='30' viewBox='0 0 1000 120'%3E%3Cg fill='none' stroke='%23e8e8e8' stroke-width='1.2' stroke-opacity='0.94'%3E%3Cpath d='M-500 75c0 0 125-30 250-30S0 75 0 75s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 45c0 0 125-30 250-30S0 45 0 45s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 105c0 0 125-30 250-30S0 105 0 105s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 15c0 0 125-30 250-30S0 15 0 15s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500-15c0 0 125-30 250-30S0-15 0-15s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 135c0 0 125-30 250-30S0 135 0 135s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3C/g%3E%3C/svg%3E")
+}
+
+@media print {
+    body {
+        background: #fff !important
+    }
+}
+
+footer,
+html {
+    color: #aaa;
+    background-color: #0f0b08
+}
+
+@media (max-height:568px) {
+    header .uk-navbar-item {
+        min-height: 54px
+    }
+}
+
+#menu .uk-nav-primary>li>a {
+    font-size: 1.4rem
+}
+
+.uk-divider-small::after {
+    width: 200px
+}
+
+@supports not (justify-content:center) {
+    .uk-icon-button {
+        padding-left: 8px
+    }
+}
+
+.one-dot-upper,
+.uk-icon {
+    transform: translateY(-2px)
+}
+
+@media all and (display-mode:standalone) {
+    .hidden-on-pwa {
+        display: none
+    }
+}
+
+@media print {
+    #permanent_link {
+        display: block !important
+    }
+}
+
+@media screen {
+    #permanent_link {
+        display: none !important
+    }
+}
+
+@media print {
+
+    footer,
+    header {
+        display: none !important
+    }
+}
+
+em,
+mark {
+    font-style: normal;
+    background-color: unset;
+    color: #b00
+}
+
+#work_menu .indent {
+    padding: 0 .3rem
+}
+
+header nav {
+    padding-left: env(safe-area-inset-left) !important;
+    padding-right: env(safe-area-inset-right) !important;
+    height: 52px
+}
+
+header nav .uk-navbar-left .uk-navbar-nav {
+    align-items: center
+}
+
+header nav .uk-navbar-left .uk-navbar-nav #nav_title {
+    min-height: 52px
+}
+
+header nav .uk-navbar-right {
+    min-width: 112px
+}
+
+main {
+    font-family: Tinos, "Hiragino Mincho ProN", "Source Han Serif", "Source Han Serif TC", "Noto Serif CJK", "Noto Serif TC", "Noto Serif SC", Songti, "LiSong Pro", "Apple LiSung", "新細明體", "新细明体", PMingLiU, "細明體", "细明体", MingLiU, HanaMinA, HanaMinB, HanaMinC, "Hanazono Mincho A", "Hanazono Mincho B", "Hanazono Mincho C", Jomolhari, serif;
+    font-style: normal !important;
+    font-weight: 400;
+    margin-top: 4rem;
+    margin-bottom: 100px;
+    font-size: 1.4rem;
+    letter-spacing: .07rem;
+    text-align: justify
+}
+
+@media print {
+    main {
+        margin-bottom: 0
+    }
+}
+
+main h1 {
+    font-family: Tinos, "Hiragino Mincho ProN", "Source Han Serif", "Source Han Serif TC", "Noto Serif CJK", "Noto Serif TC", "Noto Serif SC", Songti, "LiSong Pro", "Apple LiSung", "新細明體", "新细明体", PMingLiU, "細明體", "细明体", MingLiU, HanaMinA, HanaMinB, HanaMinC, "Hanazono Mincho A", "Hanazono Mincho B", "Hanazono Mincho C", Jomolhari, serif;
+    font-style: normal !important;
+    font-weight: 700;
+    color: #800;
+    letter-spacing: .5rem;
+    line-height: 1.6;
+    margin-top: 5rem;
+    margin-bottom: 8rem
+}
+
+main p {
+    margin-bottom: 2rem
+}
+
+main .dp-button-row {
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans CJK", "Noto Sans TC", "Noto Sans SC", "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", PingFang, "微軟正黑體", "微软正黑体", "Microsoft JhengHei", "微軟雅黑", "微软雅黑", "Microsoft YaHei", sans-serif;
+    font-style: normal !important;
+    font-weight: 400;
+    min-height: 20px
+}
+
+@media print {
+    main .dp-button-row {
+        display: none !important
+    }
+}
+
+main .dp-button-row.flex-button-row {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-evenly
+}
+
+main .dp-button-row.flex-button-row a {
+    margin-bottom: 25px
+}
+
+@supports (padding:max(0px)) {
+    main {
+        padding-left: max(15px, env(safe-area-inset-left)) !important;
+        padding-right: max(15px, env(safe-area-inset-right)) !important
+    }
+}
+
+@media (min-width:640px) {
+    @supports (padding:max(0px)) {
+        main {
+            padding-left: max(30px, env(safe-area-inset-left)) !important;
+            padding-right: max(30px, env(safe-area-inset-right)) !important
+        }
+    }
+}
+
+@media (min-width:960px) {
+    @supports (padding:max(0px)) {
+        main {
+            padding-left: max(40px, env(safe-area-inset-left)) !important;
+            padding-right: max(40px, env(safe-area-inset-right)) !important
+        }
+    }
+}
+
+#search_dialog .uk-search .uk-search-input {
+    border: none;
+    font-size: 1.2rem
+}
+
+#download_dialog a {
+    font-size: 1rem
+}
+
+.line-debug {
+    float: right;
+    position: absolute;
+    right: 5px;
+    color: red;
+    border-top: 1px solid red;
+    font-size: .5rem
+}
+
+@media print {
+    .line-debug {
+        display: none !important
+    }
+}
+
+main article.cbeta div.div-w {
+    color: #0000a0
+}
+
+main article.cbeta div.lg {
+    color: #008040;
+    margin-bottom: 1.5em
+}
+
+main article.cbeta div.p {
+    margin-bottom: 20px;
+    line-height: 1.4;
+    text-indent: 2em
+}
+
+main article.cbeta p.byline {
+    text-align: right
+}
+
+main article.cbeta p.h1 {
+    text-indent: 2em;
+    font-weight: 700
+}
+
+main article.cbeta p.h2 {
+    text-indent: 3em;
+    font-weight: 700
+}
+
+main article.cbeta p.h3 {
+    text-indent: 4em;
+    font-weight: 700
+}
+
+main article.cbeta p.h4 {
+    text-indent: 2em;
+    font-weight: 700
+}
+
+main article.cbeta p.h5 {
+    text-indent: 3em;
+    font-weight: 700
+}
+
+main article.cbeta p.h6 {
+    text-indent: 4em;
+    font-weight: 700
+}
+
+main article.cbeta p.h7 {
+    text-indent: 2em;
+    font-weight: 700
+}
+
+main article.cbeta p.h8 {
+    text-indent: 2em;
+    font-weight: 700
+}
+
+main article.cbeta span.corr {
+    color: red
+}
+
+main article.cbeta span.note-inline {
+    color: #9f5000;
+    font-size: small
+}
+
+main article.cbeta table {
+    border-collapse: collapse
+}
+
+main article.cbeta td,
+main article.cbeta th {
+    border: solid;
+    border-width: 1px;
+    padding: 5px;
+    word-wrap: break-word;
+    word-break: break-all;
+    text-indent: 0
+}
+
+main article.cbeta ul {
+    padding-left: 20px
+}
+
+main article.cbeta ul.simple {
+    list-style-type: none
+}
+
+main article.cbeta .noteAnchor {
+    font-size: 50%;
+    vertical-align: super
+}
+
+main article.cbeta .first-line {
+    font-family: Tinos, "Hiragino Mincho ProN", "Source Han Serif", "Source Han Serif TC", "Noto Serif CJK", "Noto Serif TC", "Noto Serif SC", Songti, "LiSong Pro", "Apple LiSung", "新細明體", "新细明体", PMingLiU, "細明體", "细明体", MingLiU, HanaMinA, HanaMinB, HanaMinC, "Hanazono Mincho A", "Hanazono Mincho B", "Hanazono Mincho C", Jomolhari, serif;
+    font-style: normal !important;
+    font-weight: 700;
+    color: rgba(15, 11, 8, .3);
+    font-size: 1.2rem
+}
+
+main article.cbeta .div-xu p:not(.head, .byline) {
+    color: #263658
+}
+
+main article.cbeta .head,
+main article.cbeta p.juan {
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans CJK", "Noto Sans TC", "Noto Sans SC", "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", PingFang, "微軟正黑體", "微软正黑体", "Microsoft JhengHei", "微軟雅黑", "微软雅黑", "Microsoft YaHei", sans-serif;
+    font-style: normal !important;
+    font-weight: 700;
+    font-size: 1.4rem;
+    margin-top: 3rem;
+    color: #000
+}
+
+main article.cbeta p.byline {
+    margin-bottom: 4rem;
+    color: rgba(15, 11, 8, .3);
+    font-size: 1.2rem
+}
+
+main article.cbeta .div-jing .head {
+    font-weight: 700;
+    margin-top: 20px
+}
+
+main article.cbeta .doube-line-note {
+    font-size: 1rem;
+    vertical-align: text-top;
+    color: #800
+}
+
+main article.cbeta div.lg {
+    color: #01174c;
+    font-family: Tinos, "Hiragino Mincho ProN", "Source Han Serif", "Source Han Serif TC", "Noto Serif CJK", "Noto Serif TC", "Noto Serif SC", Songti, "LiSong Pro", "Apple LiSung", "新細明體", "新细明体", PMingLiU, "細明體", "细明体", MingLiU, HanaMinA, HanaMinB, HanaMinC, "Hanazono Mincho A", "Hanazono Mincho B", "Hanazono Mincho C", Jomolhari, serif;
+    font-style: normal !important;
+    font-weight: 700;
+    margin-left: 1rem !important
+}
+
+main article.cbeta div.lg .lg-row .lg-cell {
+    display: contents
+}
+
+main article.cbeta div.lg .lg-row.hang {
+    margin-left: -1.5rem
+}
+
+main article.cbeta .bip-table {
+    display: table
+}
+
+main article.cbeta .bip-table .bip-table-row {
+    display: table-row
+}
+
+main article.cbeta .bip-table .bip-table-row .bip-table-cell {
+    display: table-cell;
+    border: 1px solid #d3d3d3;
+    padding: .7rem 2rem
+}
+
+main article.cbeta caesura {
+    margin-left: 1rem
+}
+
+main article.cbeta #cbeta-copyright {
+    display: none
+}
+
+main article.kuma .title {
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #ccc
+}
+
+main article.kuma .title h2 {
+    margin-top: 1rem;
+    margin-bottom: 1rem
+}
+
+main article.kuma a[name] {
+    font-size: .8rem;
+    color: #387cf6;
+    position: relative;
+    top: -.6rem
+}
+
+main article.kuma a[name]:hover {
+    text-decoration: none;
+    color: #06378f
+}
+
+main article.kuma a[name] span[uk-icon] {
+    transform: rotate(90deg)
+}
+
+main article.kuma a[name].no-outline {
+    outline: 0
+}
+
+main article.kuma .iHanzi {
+    width: 1.8rem;
+    height: 1.8rem
+}
+
+main article.kuma .sCharBo,
+main article.kuma .sCharSaLtn {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
+    -webkit-hyphens: auto
+}
+
+main article.kuma .sCharBo {
+    vertical-align: text-top;
+    padding-inline-start: 3px;
+    padding-inline-end: 3px
+}
+
+main article.kuma h2.hSection {
+    font-family: Tinos, "Hiragino Mincho ProN", "Source Han Serif", "Source Han Serif TC", "Noto Serif CJK", "Noto Serif TC", "Noto Serif SC", Songti, "LiSong Pro", "Apple LiSung", "新細明體", "新细明体", PMingLiU, "細明體", "细明体", MingLiU, HanaMinA, HanaMinB, HanaMinC, "Hanazono Mincho A", "Hanazono Mincho B", "Hanazono Mincho C", Jomolhari, serif;
+    font-style: normal !important;
+    font-weight: 700;
+    font-size: 1.8rem;
+    color: #800;
+    margin-top: 6.6rem;
+    margin-bottom: 2.8rem
+}
+
+@media print {
+    main article.kuma h2.hSection {
+        font-size: 2rem;
+        margin-top: 70px
+    }
+}
+
+main article.kuma h2:not(.hSection) {
+    font-size: 1.15rem
+}
+
+main article.kuma .sItCbeta,
+main article.kuma .sItLibData {
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans CJK", "Noto Sans TC", "Noto Sans SC", "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", PingFang, "微軟正黑體", "微软正黑体", "Microsoft JhengHei", "微軟雅黑", "微软雅黑", "Microsoft YaHei", sans-serif;
+    font-style: normal !important;
+    font-weight: 400;
+    color: #999;
+    font-size: 80%
+}
+
+main article.kuma .sEm {
+    font-weight: 700
+}
+
+main article.kuma .transAkn {
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans CJK", "Noto Sans TC", "Noto Sans SC", "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", PingFang, "微軟正黑體", "微软正黑体", "Microsoft JhengHei", "微軟雅黑", "微软雅黑", "Microsoft YaHei", sans-serif;
+    font-style: normal !important;
+    font-weight: 400;
+    color: #999;
+    font-size: 80%
+}
+
+main article.kuma .sItMtSub {
+    vertical-align: sub;
+    font-size: 85%
+}
+
+main article.kuma .sSup {
+    vertical-align: top;
+    font-size: 85%
+}
+
+main article.kuma .sSub {
+    vertical-align: sub;
+    font-size: 85%
+}
+
+main article.kuma .highlightSect {
+    border: 1px solid #ccc;
+    padding: 1.5rem;
+    padding-bottom: 0
+}
+
+main article.kuma .sTransRef0 {
+    color: #06378f
+}
+
+main article.kuma .sTransRef1 {
+    color: #88722a
+}
+
+main .img-width-80 {
+
+    width: 80%;
+
+}
