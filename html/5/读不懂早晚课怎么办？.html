@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>读不懂早晚课怎么办？</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,shrink-to-fit=no">
+	<meta name="msapplication-TileColor" content="#ffc40d">
+	<meta name="msapplication-config" content="/dist/browserconfig.xml">
+	<meta name="theme-color" content="#eeeeee">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="translucent">
+	<meta name="format-detection" content="telephone=no">
+	<link rel="stylesheet" href="../../js_css_files/uikit.min.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Noto+Serif+TC:wght@400;700&family=Tinos:ital,wght@0,400;0,700;1,400;1,700&Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Jomolhari&display=swap">
+	<link rel="stylesheet" href="../../js_css_files/reader-uikit.2rssur4x7b79pf.css">
+	<script id="cktools">// ==UserScript==
+		// @name         CKTools
+		// @namespace    ckylin-script-lib-combined-tools
+		// @version      1.6.1
+		// @match        http://*
+		// @match        https://*
+		// @author       CKylinMC
+		// @license      GPLv3 License
+		// ==/UserScript==
+		(function () {
+			const VERSION = 1.6;
+			if ('CKTools' in window) {
+				if (!window.CKTools.ver) console.warn('Unrecognized version of CKTools is already loaded, overwriting...');
+				else if (window.CKTools.ver > VERSION) throw new Error("You have newer version CKTools loaded. Aborting loading version " + VERSION);
+				else console.warn(`You have older version of CKTools (${window.CKTools.ver}) was loaded, and now upgrading to newer version ${VERSION}.`);
+			}
+			class CKTools {
+				static ver = VERSION
+				static get(q, base = document) {
+					return base.querySelector(q);
+				}
+				static getAll(q, base = document) {
+					return [...base.querySelectorAll(q)];
+				}
+				static domHelper(options = {}, compatibleParm2 = {}) {
+					let tagName = 'div';
+					if (typeof (options) == 'string') {
+						/* Migrate from version 1 */
+						tagName = options;
+						/* Migrate from makeDom */
+						if (compatibleParm2.constructor.name == 'Object') options = compatibleParm2;
+						else if (compatibleParm2.constructor.name == 'AsyncFunction') options = {
+							initAsync: compatibleParm2
+						};
+						else if (compatibleParm2.constructor.name == 'Function') options = {
+							init: compatibleParm2
+						};
+						else options = {};
+					}
+					if (options.listeners) {
+						/* Migrate from version 1 */
+						if (!options.on) options.on = {};
+						Object.assign(options.on, options.listeners);
+					}
+					if (options.classnames) {
+						/* Migrate from version 1 */
+						if (!options.classList) options.classList = [];
+						options.classList.concat(options.classnames);
+					}
+					if (options.tag) tagName = options.tag;
+					let el;
+					if (options.from) {
+						if (options.from instanceof HTMLElement) {
+							el = options.from;
+						} else if (typeof (options.from) == "string") {
+							els = domHelper(tagName, {
+								html: options.from
+							});
+							if (els.childElementCount === 0) {
+								el = document.createElement(tagName);
+							} else if (els.childElementCount === 1) {
+								el = els.firstElementChild;
+							} else {
+								el = els;
+							}
+						}
+					} else if (options.query) {
+						const query = document.querySelector(options.query);
+						if (query) el = query;
+						else return null;
+					} else el = document.createElement(tagName);
+					if (options.id) el.id = options.id;
+					if (options.html) el.innerHTML = options.html;
+					if (options.text) el.innerText = options.text;
+					if (options.attr) {
+						for (const ak of Object.keys(options.attr)) {
+							el.setAttribute(ak, options.attr[ak]);
+						}
+					}
+					if (options.cssText) el.style.cssText = options.cssText;
+					if (options.style) Object.assign(el.style, options.style);
+					if (options.css) Object.assign(el.style, options.css);
+					if (options.childs) {
+						if (options.childs instanceof Array) options.childs.filter(el => !!el).forEach(child => {
+							if (child instanceof HTMLElement) el.appendChild(child);
+							else if (child.hasOwnProperty('type') && child.hasOwnProperty('content')) {
+								switch (child.type) {
+									case 'html': {
+										arguments.callee('span', {
+											from: child.content,
+											append: el
+										});
+									}
+										break;
+									case 'style': {
+										const scoped = child.hasOwnProperty('scoped') && !!child.scoped;
+										arguments.callee('style', {
+											html: child.content,
+											append: el,
+											attr: {
+												scoped
+											}
+										});
+									}
+										break;
+									default:
+										el.appendChild(arguments.callee(child.type, child.content));
+								}
+							} else el.appendChild(document.createTextNode(child));
+						});
+						else if (options.childs instanceof HTMLElement) el.appendChild(options.childs);
+						else el.appendChild(document.createTextNode(options.childs));
+					}
+					if (options.classlist) {
+						if (options.classlist instanceof Array) options.classlist.forEach(classname => {
+							el.classList.add(classname);
+						});
+						else el.classList.add(...options.classlist.split(" "));
+					}
+					if (options.classList) {
+						if (options.classList instanceof Array) options.classList.forEach(classname => {
+							el.classList.add(classname);
+						});
+						else el.classList.add(...options.classList.split(" "));
+					}
+					if (options.on) {
+						for (let listenerName of Object.keys(options.on)) {
+							el.addEventListener(listenerName, options.on[listenerName]);
+						}
+					}
+					if (options.off) {
+						for (let listenerName of Object.keys(options.of)) {
+							el.removeEventListener(listenerName, options.off[listenerName]);
+						}
+					}
+					if (options.bind) {
+						const serverName = "$bindingserver" + Math.floor(Math.random() * 100000);
+						const bindings = CKTools.deepClone(options.bind);
+						const unbindProperty = (prop) => bindings[prop] = undefined;
+						const unbindAllProperties = () => el[serverName].disconnect();
+						el[serverName] = new MutationObserver(mutations => {
+							for (const mutation in mutations) {
+								if (bindings.hasOwnProperty(mutation.attributeName)) {
+									try {
+										bindings[mutation.attributeName]({
+											target: mutation.target,
+											attributeName: mutation.attributeName,
+											attributeNamespace: mutation.attributeNamespace,
+											oldValue: mutation.oldValue,
+											newValue: mutation.target.getAttribute(mutation.attributeName) || undefined,
+											unbind: () => unbindProperty(mutation.attributeName),
+											stopListen: () => (unbindAllProperties(), el[serverName] = undefined)
+										});
+									} catch (e) { }
+								}
+							}
+						});
+						el.addEventListener('DOMNodeRemoved', () => (unbindAllProperties(), el[serverName] = undefined));
+						el[serverName].observe(el, {
+							attributes: true,
+							attributeOldValue: true
+						});
+					}
+					if (options.append && options.append instanceof HTMLElement) options.append.appendChild(el);
+					if (options.insertBefore && insertBefore instanceof HTMLElement) options.insertBefore.parentNode.insertBefore(el, options.insertBefore);
+					if (options.insertAfter && insertAfter instanceof HTMLElement) options.insertAfter.parentNode.insertAfter(el, options.insertAfter);
+					if (options.init && options.init instanceof Function) options.init(el);
+					if (options.initAsync && options.initAsync instanceof Function) {
+						return options.initAsync(el).then(() => el);
+					}
+					return el;
+				}
+				static makeDom() {
+					console.warn('"makeDom" has been deprecated. Redirecting to "domHelper"...');
+					return CKTools.domHelper(...arguments);
+				}
+				static addDom(item) {
+					const make = (tag = 'div') => document.createElement(tag);
+					const txt = (it = '') => document.createTextNode(it);
+					class DOMItem {
+						constructor(it = '') {
+							this.setItem(it);
+						}
+						setItem(it = '') {
+							if (typeof it === 'string' || it instanceof String) {
+								this.el = txt(it);
+							} else if (it instanceof HTMLElement) {
+								this.el = it;
+							} else this.el = txt(it.toString());
+							if (!this.target) this.target = document.body;
+							this.mode = 'child';
+							return this;
+						}
+						inside(q = document.body) {
+							this.mode = 'child';
+							if (q instanceof HTMLElement) {
+								this.target = q;
+							} else if (typeof q === 'string' || q instanceof String) {
+								const ql = this.target.querySelector(q);
+								if (ql) this.target = ql;
+							}
+							return this;
+						}
+						after(a = null) {
+							this.mode = 'child-after';
+							if (a instanceof HTMLElement) {
+								this.after = a;
+							} else if (typeof a === 'string' || a instanceof String) {
+								const al = this.target.querySelector(a);
+								if (al) this.after = al;
+							}
+							return this;
+						}
+						before(a = null) {
+							this.mode = 'child-before';
+							if (a instanceof HTMLElement) {
+								this.before = a;
+							} else if (typeof a === 'string' || a instanceof String) {
+								const al = this.target.querySelector(a);
+								if (al) this.before = al;
+							}
+							return this;
+						}
+						done() {
+							switch (this.mode) {
+								case "child": {
+									if (this.el && this.target)
+										this.target.appendChild(this.el);
+								}
+									break;
+								case "child-before": {
+									if (this.el && this.target && this.before)
+										this.target.insertBefore(this.el, this.before);
+								}
+									break;
+								case "child-after": {
+									if (this.el && this.target && this.after)
+										this.target.insertBefore(this.el, this.after.nextSibling);
+								}
+									break;
+							}
+						}
+					}
+					return new DOMItem(item);
+				}
+				static deepClone(obj) {
+					let newObject = {};
+					if (Array.isArray(obj)) {
+						newObject = [];
+						for (let i = 0; i < obj.length; i++) {
+							newObject.push(CKTools.deepClone(obj[i]));
+						}
+						return newObject;
+					}
+					Object.keys(obj).map(key => {
+						if (typeof obj[key] === 'object') {
+							newObject[key] = CKTools.deepClone(obj[key]);
+						} else {
+							newObject[key] = obj[key];
+						}
+					});
+					return newObject;
+				}
+				static getCookie(name) {
+					const value = `; ${document.cookie}`;
+					const parts = value.split(`; ${name}=`);
+					if (parts.length === 2) return parts.pop().split(';').shift();
+				}
+				static clearAllCookies() {
+					return document.cookie.split(';').forEach(cookie => document.cookie = cookie.replace(/^ +/, '').replace(/=.*/, `=;expires=${new Date(0).toUTCString()};path=/`));
+				}
+				static getUrlParam(key) {
+					return (new URL(location.href)).searchParams.get(key);
+				}
+				static wait(ms) {
+					return new Promise(r => setTimeout(r, ms));
+				}
+				static async waitForDom(query, domparent = document, maxRetries = 20, gagms = 200) {
+					let i = maxRetries;
+					while (--i > 0) {
+						if (domparent.querySelector(query)) return true;
+						await CKTools.wait(gagms);
+					}
+					return false;
+				}
+				static async waitForAttribute(q, attr) {
+					let i = 50;
+					let value;
+					while (--i >= 0) {
+						if ((attr in q) &&
+							q[attr] != null) {
+							value = q[attr];
+							break;
+						}
+						await wait(100);
+					}
+					return value;
+				}
+				static async waitForPageVisible() {
+					if (document.hidden) return true;
+					return new Promise(r => {
+						const handler = () => {
+							r(true);
+							document.removeEventListener('visibilitychange', handler);
+						};
+						document.addEventListener("visibilitychange", handler)
+					});
+				}
+				static clearStyles(className = "injectedStyle") {
+					let dom = document.querySelectorAll("style." + className);
+					if (dom) [...dom].forEach(e => e.remove());
+				}
+				static addStyle(s, className = "injectedStyle", mode = "append", injectBase = document.head) {
+					switch (mode) {
+						default:
+						case "append":
+							break;
+						case "unique":
+							if (document.querySelector("style." + className)) return;
+							break;
+						case "update":
+							CKTools.clearStyles(className);
+							break;
+					}
+					let style = document.createElement("style");
+					style.classList.add(className);
+					style.innerHTML = s;
+					injectBase.appendChild(style);
+				}
+				// stackoverflow
+				static debounce(func, timeout = 300) {
+					let timer;
+					return (...args) => {
+						clearTimeout(timer);
+						timer = setTimeout(() => {
+							func.apply(this, args);
+						}, timeout);
+					};
+				}
+				static throttle(callback, limit) {
+					var waiting = false;
+					return function () {
+						if (!waiting) {
+							callback.apply(this, arguments);
+							waiting = true;
+							setTimeout(function () {
+								waiting = false;
+							}, limit);
+						}
+					}
+				}
+				static domContains(selector, text) {
+					var elements = document.querySelectorAll(selector);
+					return [].filter.call(elements, function (element) {
+						return RegExp(text).test(element.textContent);
+					});
+				}
+				static mapReplace(str, map) {
+					//reference: https://segmentfault.com/q/1010000023489916 answer-2
+					const replace = ({
+						str,
+						reg,
+						replacer
+					}) =>
+						str.replace(new RegExp(reg, 'g'), replacer);
+					return Object.keys(map).reduce((str, reg) => replace({
+						str,
+						reg,
+						replacer: map[reg]
+					}), str);
+				}
+				static padStart(num, count = 2) {
+					return (('' + Math.pow(10, count)).substr(1) + num).slice(-1 * Math.max(count, ('' + num).length));
+				}
+				static fixNum(num, fix = 0) {
+					return Math.floor(num * (Math.pow(10, fix))) / (Math.pow(10, fix));
+				}
+				static random = class {
+					static hex() {
+						return `#${Math.floor(Math.random() * 0xffffff).toString(16).padEnd(6, "0")}`;
+					}
+					static shuffleArray(arr) {
+						return arr.sort(() => 0.5 - Math.random());
+					}
+					static num(min, max) {
+						return Math.random() * (max - min) + min;
+					}
+					static fromArray(arr = []) {
+						return arr[Math.floor(CKTools.random.num(0, arr.length))];
+					}
+					static from(...args) {
+						return CKTools.random.fromArray(args);
+					}
+				}
+				static is = class {
+					static str(s) {
+						return (s != null && (typeof s === "string" || s instanceof String));
+					}
+					static elementInViewport(el) {
+						var rect = el.getBoundingClientRect();
+						return (
+							rect.top >= 0 &&
+							rect.left >= 0 &&
+							rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+							rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+						);
+					}
+					static asyncFn(fn) {
+						return fn.constructor.name === "AsyncFunction";
+					}
+					static darkMode() {
+						return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+					}
+				}
+				static modal = class {
+					static openModal(title = '', content) {
+						CKTools.modal.blockWindow();
+						let modal = CKTools.get("#CKTOOLS-modal");
+						if (!modal) modal = CKTools.modal.initModal();
+						modal.setTitle(title);
+						modal.setContent(content);
+						modal.show();
+					}
+					static isModalShowing() {
+						let modal = CKTools.get("#CKTOOLS-modal");
+						if (modal) return modal.classList.contains("show");
+						else return false;
+					}
+					static hideModal() {
+						CKTools.modal.blockWindow(false);
+						let modal = CKTools.get("#CKTOOLS-modal");
+						if (modal) modal.hide();
+					}
+					static initModal() {
+						CKTools.addStyle(`
+				#CKTOOLS-modal{
+					position: fixed;
+					z-index: 99010;
+					top: 50%;
+					left: 50%;
+					width: 300px;
+					width: 30vw;
+					/*height: 300px;
+					height: 50vh;*/
+					background: white;
+					border-radius: 8px;
+					padding: 12px;
+					transform: translate(-50%,-50%);
+					transition: all .3s;
+					box-shadow: 0 2px 8px grey;
+				}
+				#CKTOOLS-modal.show{
+					opacity: 1;
+					transform: translate(-50%,-50%) scale(1);
+				}
+				#CKTOOLS-modal.hide{
+					opacity: 0;
+					pointer-events: none;
+					transform: translate(-50%,-50%) scale(0.9);
+				}
+				.CKTOOLS-modal-title{
+					font-size: large;
+				}
+				.CKTOOLS-modal-content{
+					font-size: medium;
+				}
+				.CKTOOLS-modal-content>div{
+					display: flex;
+					margin: 6px 10px;
+					flex-wrap: wrap;
+					flex-direction: column;
+					align-content: space-around;
+					justify-content: space-between;
+					align-items: center;
+				}
+				.CKTOOLS-toolbar-btns{
+					flex: 1;
+					border: none;
+					background: #2196f3;
+					border-radius: 3px;
+					margin: 0 6px;
+					padding: 3px;
+					color: white;
+					box-shadow: 0 2px 3px grey;
+					min-width: 60px;
+				}
+				.CKTOOLS-toolbar-btns:hover{
+					filter: brightness(0.85);
+				}
+				`, "CKTOOLS-modal-css", "unique");
+						const modal = document.createElement("div");
+						modal.id = "CKTOOLS-modal";
+						modal.className = "hide";
+
+						const header = document.createElement("h2");
+						header.className = "CKTOOLS-modal-title"
+						modal.appendChild(header);
+
+						modal.setTitle = (t = '') => {
+							header.innerHTML = t;
+						}
+
+						const contents = document.createElement("div");
+						contents.className = "CKTOOLS-modal-content";
+						modal.appendChild(contents);
+
+						modal.setContent = async (c) => {
+							let ct = c;
+							if (ct instanceof Function) {
+								ct = await ct();
+							}
+							if (ct instanceof HTMLElement) {
+								contents.innerHTML = '';
+								contents.appendChild(ct);
+								return;
+							}
+							if (typeof (ct) === "string") {
+								contents.innerHTML = ct;
+								return;
+							}
+							console.log("unknown: ", ct);
+						}
+						modal.addContent = async (c) => {
+							let ct = c;
+							if (ct instanceof Function) {
+								ct = await ct();
+							}
+							if (ct instanceof HTMLElement) {
+								contents.appendChild(ct);
+								return;
+							}
+							if (ct instanceof String) {
+								contents.innerHTML += ct;
+								return;
+							}
+							console.log("unknown: ", ct);
+						}
+
+						modal.close = CKTools.modal.closeModal;
+						modal.open = CKTools.modal.openModal;
+						modal.show = () => {
+							modal.className = "show";
+						}
+						modal.hide = () => {
+							modal.className = "hide";
+						}
+
+						document.body.appendChild(modal);
+						return modal;
+					}
+					static closeModal() {
+						CKTools.modal.blockWindow(false);
+						let modal = CKTools.get("#CKTOOLS-modal");
+						if (modal) modal.remove();
+					}
+					static async alertModal(title = "", content = "", okbtn = null) {
+						if (CKTools.modal.isModalShowing()) {
+							CKTools.modal.hideModal();
+							await CKTools.wait(200);
+						}
+						CKTools.modal.openModal(title, await CKTools.domHelper("div", async container => {
+							container.appendChild(await CKTools.domHelper("div", tip => {
+								tip.innerHTML = content;
+							}))
+							if (okbtn !== null)
+								container.appendChild(await CKTools.domHelper("div", async btns => {
+									btns.style.display = "flex";
+									btns.appendChild(await CKTools.domHelper("button", btn => {
+										btn.className = "CKTOOLS-toolbar-btns";
+										btn.innerHTML = okbtn;
+										btn.onclick = e => CKTools.modal.hideModal();
+									}))
+								}))
+						}))
+						await CKTools.wait(300);
+					}
+					static blockWindow(block = true) {
+						CKTools.addStyle(`
+				#CKTOOLS-blockWindow{
+					z-index: 99005;
+					display: block;
+					background: #00000080;
+					opacity: 0;
+					transition: all .3s;
+					position: fixed;
+					left: 0;
+					top: 0;
+					width: 100vw;
+					height: 100vh;
+				}
+				#CKTOOLS-blockWindow.hide{
+					pointer-events: none;
+					opacity: 0;
+				}
+				#CKTOOLS-blockWindow.show{
+					opacity: 1;
+				}
+				`, "CKTOOLS-blockWindow-css", "unique");
+						let dom = CKTools.get("#CKTOOLS-blockWindow");
+						if (!dom) {
+							dom = document.createElement("div");
+							dom.id = "CKTOOLS-blockWindow";
+							dom.className = "hide";
+							document.body.appendChild(dom);
+						}
+						if (block) {
+							dom.className = "show";
+						} else {
+							dom.className = "hide";
+						}
+					}
+				}
+
+				static EventEmitter = class {
+					handlers = {};
+					on(name, func) {
+						if (!(func instanceof Function)) throw "Param must be func!";
+						if (!(name in this.handlers)) {
+							this.handlers[name] = [];
+						}
+						this.handlers[name].push(func);
+					}
+					off(name, func) {
+						if (!(func instanceof Function)) throw "Param must be func!";
+						if (name in this.handlers) {
+							for (let i = 0; i < this.handlers[name].length; i++) {
+								if (this.handlers[name][i] === func) {
+									this.handlers[name].splice(i, 1);
+									i--;
+								}
+							}
+						}
+					}
+					clean(name) {
+						if (name in this.handlers) {
+							this.handlers[name] = [];
+						}
+					}
+					emit(name, ...args) {
+						if (name in this.handlers) {
+							for (let func of this.handlers[name]) {
+								try {
+									func(...args);
+								} catch (e) {
+									console.error('ERROR:', e);
+								}
+							}
+						}
+					}
+				}
+				static HoldClick = class {
+					dom;
+					emitter = new CKTools.EventEmitter;
+					downTime = 0;
+					holdingTime = 250;
+					mouseDown = false;
+
+					constructor(dom, holdingTime = 250) {
+						this.bind(dom);
+						this.holdingTime = holdingTime;
+					}
+
+					bind(dom) {
+						if (this.dom) {
+							this.unregListeners();
+						}
+						if (dom instanceof HTMLElement) {
+							this.dom = dom;
+							this.initListener();
+						}
+					}
+
+					onclick(func) {
+						this.emitter.on("click", func);
+						return this;
+					}
+
+					onhold(func) {
+						this.emitter.on("hold", func);
+						return this;
+					}
+
+					onup(func) {
+						this.emitter.on("up", func);
+						return this;
+					}
+
+					offclick(func) {
+						this.emitter.off("click", func);
+						return this;
+					}
+
+					offhold(func) {
+						this.emitter.off("hold", func);
+						return this;
+					}
+
+					offup(func) {
+						this.emitter.off("up", func);
+						return this;
+					}
+
+					resetCallback(name = "all") {
+						const allEv = ["click", "hold", "up"];
+						if (name === "all") {
+							allEv.forEach(e => this.emitter.clean(e));
+						} else if (allEv.includes(name)) {
+							this.emitter.clean(name);
+						}
+					}
+
+					unregListeners() {
+						this.dom.removeEventListener("mouseup", this.handleMouseUp.bind(this));
+						this.dom.removeEventListener("mousedown", this.handleMouseDown.bind(this));
+						this.dom.removeEventListener("mouseout", this.handleMouseOut.bind(this));
+					}
+
+					uninstall() {
+						this.resetCallback();
+						this.unregListeners();
+					}
+
+					handleMouseDown(e) {
+						if (e.button !== 0 && e.button !== 1) return;
+						e.preventDefault();
+						this.mouseDown = true;
+						this.downTime = (new Date()).getTime();
+						setTimeout(() => {
+							if (this.mouseDown) {
+								console.log(this);
+								this.mouseDown = false;
+								this.downTime = 0;
+								this.emitter.emit("hold", e);
+							}
+						}, this.holdingTime)
+					}
+
+					handleMouseUp(e) {
+						if (e.button !== 0 && e.button !== 1) return;
+						e.preventDefault();
+						if (this.mouseDown) {
+							this.mouseDown = false;
+							const currTime = (new Date).getTime();
+							if ((currTime - this.downTime) >= this.holdingTime) {
+								this.emitter.emit("hold", e);
+							} else {
+								this.emitter.emit("click", e);
+							}
+							this.downTime = 0;
+						}
+						this.emitter.emit("up", e);
+					}
+
+					handleMouseOut(e) {
+						e.preventDefault();
+						if (this.mouseDown) {
+							this.mouseDown = false;
+							this.downTime = 0;
+							this.emitter.emit("hold", e);
+						}
+					}
+
+					initListener() {
+						this.dom.addEventListener("mouseup", this.handleMouseUp.bind(this))
+						this.dom.addEventListener("mousedown", this.handleMouseDown.bind(this))
+						this.dom.addEventListener("mouseout", this.handleMouseOut.bind(this))
+					}
+				}
+				static dragger = class {
+					static defaultHandler(val) {
+						return console.log("DRAG:", val);
+					}
+					static async waitForDragger(waitStatus = true) {
+						while (CKTools.dragger.dragging !== waitStatus) await CKTools.wait(10);
+						return CKTools.dragger;
+					}
+					static async regHandler(func) {
+						if (!(func instanceof Function)) throw "Param must be a func!";
+						await CKTools.dragger.waitForDragger(false);
+						CKTools.dragger.handler = func;
+						return CKTools.dragger;
+					}
+					static handler() { }
+					static dragging = false;
+					static initialDragData = {
+						x: 0,
+						y: 0
+					}
+					static lastDragData = {
+						x: 0,
+						y: 0
+					}
+					static startDrag(e) {
+						if (CKTools.dragger.dragging) return;
+						CKTools.dragger.dragging = true;
+						console.log(CKTools.dragger.initialDragData);
+						CKTools.dragger.initialDragData.x = e.screenX;
+						CKTools.dragger.initialDragData.y = e.screenY;
+						CKTools.dragger.lastDragData.x = e.screenX;
+						CKTools.dragger.lastDragData.y = e.screenY;
+						document.body.addEventListener("mouseup", CKTools.dragger.stopDrag);
+						document.body.addEventListener("mousemove", CKTools.dragger.handleDrag);
+						console.info("DRAG:", "Start Drag");
+						return CKTools.dragger;
+					}
+					static handleDrag(e) {
+						const currPos = {
+							x: e.screenX,
+							y: e.screenY
+						};
+						const initPos = CKTools.dragger.initialDragData;
+						const delta = {
+							x: initPos.x - currPos.x,
+							y: initPos.y - currPos.y
+						}
+						const lastdelta = {
+							x: CKTools.dragger.lastDragData.x - currPos.x,
+							y: CKTools.dragger.lastDragData.y - currPos.y
+						}
+						CKTools.dragger.lastDragData = currPos;
+						CKTools.dragger.handler(delta, lastdelta);
+					}
+					static stopDrag() {
+						document.body.removeEventListener("mouseup", CKTools.dragger.stopDrag);
+						document.body.removeEventListener("mousemove", CKTools.dragger.handleDrag);
+						CKTools.dragger.handler = CKTools.dragger.defaultHandler;
+						console.info("DRAG:", "Stop Drag");
+						CKTools.dragger.dragging = false;
+						return CKTools.dragger;
+					}
+				}
+				static GUID = class {
+					static S4() {
+						return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+					}
+					static get() {
+						let S4 = CKTools.GUID.S4;
+						return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
+					}
+					static getShort() {
+						let S4 = CKTools.GUID.S4;
+						return (S4() + S4() + S4() + S4());
+					}
+				}
+			}
+			window.CKTools = CKTools;
+		})();
+	</script>
+	<style class="showav_dragablecss">
+		#CKTOOLS-modal {
+			width: fit-content !important;
+			max-width: 80% !important;
+		}
+
+		.CKTOOLS-modal-content li label b {
+			color: green !important;
+		}
+
+		.CKTOOLS-modal-content li label span {
+			color: red !important;
+		}
+
+		.showav_menuitem {
+			line-height: 2em;
+			width: 100%;
+			transition: all .3s;
+			cursor: pointer;
+		}
+
+		.showav_menuitem:hover {
+			transform: translateX(6px);
+		}
+
+		.showav_menuitem>label {
+			font-weight: bold;
+			font-size: large;
+			display: block;
+		}
+	</style>
+	<style class="showav_css_patch">
+		#CKTOOLS-modal li,
+		#CKTOOLS-modal ul {
+			list-style: none !important;
+		}
+	</style>
+</head>
+
+<body style="">
+	<div class="uk-sticky-placeholder" style="height: 0px; width: 0px; margin: 0px;"></div>
+	<header uk-sticky="sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky"
+		class="uk-sticky uk-sticky-fixed uk-sticky-below" style="position: sticky; top: 0px;">
+		<nav class="uk-navbar-container frostingGlass uk-navbar uk-navbar-sticky" uk-navbar="" style="">
+			<div class="uk-navbar-left uk-overflow-hidden">
+				<ul class="uk-navbar-nav uk-margin-small-left uk-margin-small-right">
+					<li>
+						<button id="nav_home" class="uk-icon-button uk-icon" uk-icon="home" type="button">
+							<svg width="20" height="20" viewBox="0 0 20 20">
+								<polygon points="18.65 11.35 10 2.71 1.35 11.35 0.65 10.65 10 1.29 19.35 10.65">
+								</polygon>
+								<polygon points="15 4 18 4 18 7 17 7 17 5 15 5"></polygon>
+								<polygon
+									points="3 11 4 11 4 18 7 18 7 12 12 12 12 18 16 18 16 11 17 11 17 19 11 19 11 13 8 13 8 19 3 19">
+								</polygon>
+							</svg>
+						</button>
+					</li>
+					<li id="nav_title" class="uk-navbar-item uk-text-nowrap uk-overflow-hidden">读不懂早晚课怎么办？</li>
+				</ul>
+			</div>
+		</nav>
+	</header>
+
+	<main class="uk-container uk-container-xsmall" style="margin-bottom: 0px;">
+		<h1 id="title" class="uk-text-center songti" style="margin-bottom: 80px;margin-top: 0px;">读不懂早晚课怎么办？</h1>
+		<article class="cbeta">
+			<div id="body">
+				<div class="uk-text-center" style="margin-top: 40px; margin-bottom: 40px;">
+					<img class="img-width-80" src="./jpg/1.jpg">
+				</div>
+				<div class="uk-text-center" style="margin-top: 40px; margin-bottom: 40px;">
+					<audio src="./m4a/读不懂早晚课怎么办？.mp3" controls></audio>
+				</div>
+				<div class="uk-text-center" style="margin-top: 40px; margin-bottom: 40px;">
+					<img class="img-width-80" src="./jpg/2.jpg">
+				</div>
+				<div class="div-jing">
+					<p class="">&emsp;&emsp;关于这个问题呢，我们首先要强调一点，就是关于汉传佛教、藏传佛教和南传佛教。</p>
+					<p class="">&emsp;&emsp;南传佛教属于热带佛教，它属于热带佛教，它以阿罗汉乘，也就是称为解脱道的自我解脱，或者称为阿罗汉的一个佛教，它这个佛教是偏于人天化的佛教。</p>
+					<p class="">&emsp;&emsp;那接下来呢，就是汉传佛教，汉传佛教，属于北传佛教，北传佛教属于菩萨道的佛教，也就是不但自己求得阿罗汉，更进一步希望自己和佛有同等的这种悲心，就是菩提萨埵——菩萨，就称为大乘。当然也不是说分南传就是小乘，我们北传就是大乘。南传强调解脱的意义，北传强调解脱之后或者没有解脱之前，更要向佛那里靠拢，那么这是汉传佛教。</p>
+					<p class="">&emsp;&emsp;那么，藏传佛教是从尼泊尔，往西藏地区，经西藏、内蒙传入不丹的，这叫藏传佛教。那么他强调的是梵文化的佛教，那么既要求自己的解脱，更要接近于佛，那么接近佛的过程当中，因为自己的力量不足，要借助各种本尊的修行，所以藏传佛教的信仰模式里面，这个护法神特别多，本尊法门类特别多。</p>
+					<p class="">&emsp;&emsp;那么这个传承主要还是一个原因，就是南传佛教它属于热带亚热带的这个地方，它有原来的婆罗门教的信仰的基础，所以那里面传南传佛教比较合适一点，因为南传佛教它强调解脱和生天的什么的没有冲突，那么更符合亚代的这个文化。</p>
+					<p class="">&emsp;&emsp;那么往北传呢，更符合中国文化的，那属于菩萨型的佛教，那么传入中国现在也有两千多年，从中国传到韩国，日本乃至欧洲的汉语系的佛教，称为北传佛教。</p>
+					<p class="">&emsp;&emsp;那么在印度教复兴当中，佛教受到印度教和婆罗门教和伊斯兰教的迫害之后呢，佛教逐步地在和婆罗门教的这个融合当中，就开始修炼很多本尊法门，所以逐步的形成了这个印度的特色的佛教。那么慢慢的从印度呢，后期传到尼泊尔，再传到西藏。根据西藏当地，因为西藏当地有本教，结合本教的内容又慢慢地发展出了多尊护法，以佛为主的这种藏传佛教的内容，也是很有民族特色的。这个属于就是游牧民族，或者是多种民族的这种信仰，也是非常好的。</p>
+					<div class="uk-text-center" style="margin-top: 40px; margin-bottom: 40px;">
+						<img class="img-width-80" src="./jpg/3.jpg">
+					</div>
+					<p class="">&emsp;&emsp;那么我们现在所传的呢，就是汉传佛教，首先来说它是针对汉文化，也就是针对东亚文化圈子的佛教。东亚文化圈子就是中国、韩国、日本、越南这些汉文化影响的。因为中国佛教和印度佛教最大的不同点就是印度佛教它只有空和有两派，“空”就是般若思想，“有”就是唯识思想，就是本质和认知思想，一个是谈本质，一个是谈现象，通过现象来了解本质也是对的，通过本质来了解现象也是对的，所以他这个“空、有”是不二的。但是后面慢慢就对立起来了，因为一直讲本质的内容，它就会忽视“有”；一直讲有的内容，它认识的基础，它就有时候会忽视这个“空”，所以后面到了中国以后呢，揉和了“空”和“有”的佛教之后呢，就形成了中国的佛教。</p>
+					<p class="">&emsp;&emsp;那么中国的佛教呢，首先就是以唯识的基础、以有的基础来认识这个本性、本质，就是佛性。又以佛性的东西来破除我们的执着，这个当中呢，根据印度传来的这个教义，教法就是有显和密，就是可以加以文字理解和诉说和讲说的，这叫“显”，可以显现道理；那么不可以显现道理的，直接通过参禅或者持咒，或者念佛去体悟的呢，这个叫“密”。</p>
+					<p class="">&emsp;&emsp;所以我们净土中有时候讲说“阿弥陀佛”就是一个最大的秘密，无量光，无量寿，无量觉，他讲起来这个密意无尽。它也是显，因为它有很多佛经可以理解阿弥陀佛的无量光是什么，无量寿是什么，无量正觉是什么，我们怎么来亲近他？所以我们经常说，当你力量不足的时候，祈求佛菩萨和你相应迅速加持的时候，一定要持密，这样能够瞬间和佛达到一个相应等同的界，就是意念里是佛的境界，身体里面是佛的境界，口语里面是佛的境界，那么你和佛等同无二，这叫相应。不是说你就成为佛，而是你和佛的这个语言，就是我们经常说谁家的孩子像谁。比如说你念阿弥陀佛，你的行为举动很符合佛陀的教导，你很符合一个大乘佛教的一个居士的仪表，你说话举止很符合佛法，人家就说是：哦，这个人是佛教徒！哎呀，这个人有修养！哦，这个人是非常善良！他都是根据你的语言、思想和行为表达出来的，学佛也是这样子的。</p>
+					<p class="">&emsp;&emsp;所以我们经常说力量不足的时候用密法，用密。这个密呢，我觉得不是说只是咒，这个密是不可说。“阿弥陀佛”它既是一句佛号，也是一句总结，更是一句密意的咒来理解佛法，广义上的佛法是这样。</p>
+					<p class="">&emsp;&emsp;那么我们通过“显密”，通过这个“空有”这两个组成，组合成了中国的佛教。比如说在印度没有这个宗派的，没有咱们中国的八大宗派，什么净土宗啊、律宗、密宗，没有。</p>
+					<p class="">&emsp;&emsp;在印度呢，律宗是通学，就是所有的佛教徒都要建立一个概念就是因果学，因果的基础建立在戒律上，戒和律的规范是什么呢？“戒”是戒一切恶，修一切善。“律”那是规律的生活，就是良好的生活。</p>
+					<div class="uk-text-center" style="margin-top: 40px; margin-bottom: 40px;">
+						<img class="img-width-80" src="./jpg/4.jpg">
+					</div>
+					<p class="">&emsp;&emsp;怎么生活？比如说我们三皈，我们在信仰上就有了规范，比如说：</p>
+					<p class="">&emsp;&emsp;皈依佛，我们不皈依外道天魔，就是任何问题下，你一定要向佛那里求，而不是向外道天魔求。得病乱求医，谁也投，最后病也没有治得了，现在人家挂号去讲你什么病，你找什么样的专家，什么样的科室去挂，就是专项的去求。</p>
+					<p class="">&emsp;&emsp;那么皈依法，不归依外道邪典，那么当你遇到问题的时候，不是说要求神问卜，东看西看，而是通过佛法来明白道理以后，改变自己，改变自己方法不一样了，结果它就不一样。</p>
+					<p class="">&emsp;&emsp;但是我自己没有能量，怎么办呢？</p>
+					<p class="">&emsp;&emsp;跟随僧，所以皈依僧，不皈依外道邪众。依靠僧，僧他是专业在学习的。到医院以后，我们找不到那个专家的那个房间，怎么办？肯定是找医导啊，护士啊，来引导我们找到医生。</p>
+					<p class="">&emsp;&emsp;那么，三皈依它也是这样的，皈依，皈依，回归到依靠到这个三宝当中来，佛法僧这三宝中来学习。佛呢就是专家；法呢就是你挂的这个科室，给你治病的方法；僧呢，就是引导你进入这个科室的人。这就很简单。</p>
+					<div class="uk-text-center" style="margin-top: 40px; margin-bottom: 40px;">
+						<img class="img-width-80" src="./jpg/5.jpg">
+					</div>
+					<p class="">&emsp;&emsp;所以佛教徒一定是要以“戒”为主的，所以“戒”在印度是通途。那么在通途当中，一个人在一开始进入佛门，我们肯定是“戒”。完了以后学习各种教典点，各式各样的，因为每个人都不一样，有喜欢这样的，有喜欢那样的，有这样的因缘，有那样的因缘，每个人的因缘不同，引导人的方法不一样。</p>
+					<p class="">&emsp;&emsp;就拿念佛来说吧，我们持名念佛用的调子都不一样：有四句调子，有六句调子，有八句调子，有思乡念佛的调子，有这个亡者往生了以后，这个悲叹的调子。完了以后，念佛的声音不同，对每个人的感触不同：可能有的人听到这个四句调子他很欢喜，有的人听到六句调子很欢喜，有人听到思乡调子很欢喜，有的人听到法身调字很欢喜。</p>
+					<p class="">&emsp;&emsp;其实一个佛号念出千百种，为什么有千百种？很多人说那就一个就可以了。每个人不一样，所以每个人的善根不一样，所以接引他的佛号的那一声调子就不一样，对不对？</p>
+					<p class="">&emsp;&emsp;有人在痛苦的时候，他就需要无量光，那你一定要用这种光明的语法去教导他。那么在这个人病苦的时候，他需要无量寿，那你一定要用这种希望的方法去教导他。那有的人在迷惑当中，一定要需要方法，无量觉——觉醒，你可以骂他，你可以讲道理，你甚至可以奉献出愤怒的现象。所以很多人问我说，佛为什么有愤怒相？有的人不当头一棒，他是醒不过来的，所以这一点一定要清楚。</p>
+					<p class="">&emsp;&emsp;所以，“应”以什么身得度，佛会现什么身。最后得度之后的结果是什么？是到彼岸。怎么样到彼岸？每个人的方法不同，但是结果是一样的，目的就是让你们觉悟。让你们找到回家的路，让你们人生不再迷惑。</p>
+					<div class="uk-text-center" style="margin-top: 40px; margin-bottom: 40px;">
+						<img class="img-width-80" src="./jpg/6.jpg">
+					</div>
+					<p class="">&emsp;&emsp;所以这个就是我们经常说的“定”，佛教的定，安定的方法是什么？就是“法”。其实它法就一个，因为众生的根基不同，它演变成了不同的调子：南无阿弥陀佛，南无阿弥陀佛，每个调子不同，“阿弥陀佛”声音不同，是因为声音这个调子让你感动，但是佛号，它就是“南无阿弥陀佛”。</p>
+					<p class="">&emsp;&emsp;所以一定要知道，我们提倡的是大净土，所谓大净土就是站在印度的佛教的总体来看佛教是大净土的，就是以“戒”为基础，以众生每一门每一类各自的因缘作为基调去学，所以这个就形成了中国的八大宗派：</p>
+					<p class="">&emsp;&emsp;净土宗，专门就是讲人如何往生的；</p>
+					<p class="">&emsp;&emsp;律宗专门讲大家如何修善断恶的；</p>
+					<p class="">&emsp;&emsp;唯识宗怎么讲？认识这个宇宙的；</p>
+					<p class="">&emsp;&emsp;这个三论宗怎么讲？这个本性般若的意义是怎么样有的；</p>
+					<p class="">&emsp;&emsp;天台宗是通过皈依佛乘的道理告诉大家，你不管修什么，你最后都是要往一佛乘归；</p>
+					<p class="">&emsp;&emsp;华严讲佛教的源头。</p>
+					<p class="">&emsp;&emsp;因为中国人的文化求简，就是我现在饿了要吃饭，渴了要喝水，那么我瞌睡了要睡觉。不像印度人，他一直在强调一个整体，中国人强调枝节，你不要讲那么整体，那么多东西，你告诉我现在饿了该吃什么。所以中国的佛教是有特色的，就是多样化的，多科室的佛教。</p>
+					<p class="">&emsp;&emsp;印度呢，它就是两大科类，它最后形成了佛教的整体理论，到中国就细化了。就像中医，它只有内科和外科，到了西医以后，什么耳鼻喉科啊，心外科呀，各个科室，专病专医。所以中国八大宗派不是佛教分裂成八个教派，而是根据中国人的需要，分成了八个逻辑思想。</p>
+					<p class="">&emsp;&emsp;也就是印度，它只有两堂课，一堂般若课，一堂唯识课。到了中国以后，根据中国的需要以后，他成立了不同的课，语文、数学、自然、地理，这样丰富多彩。</p>
+					<p class="">&emsp;&emsp;很多人说那我就念一句佛就好了，我什么都不用做。这一句佛你首先要念的明白。你为什么要念阿弥陀佛？阿弥陀佛他是什么样的人？他怎么成佛？他成佛了以后，他的意义在哪里？他为什么要接引我们？我们念佛的功德，阿弥陀佛是他的德号，就是他的功德。就像你每个人都有自己的名字，这个名字里面有家人对你的期望，有你家族遗传的姓氏，有你在社会的地位，对不对？一说“名人”，哦，这是谁啊，这是谁谁谁？你要知道他的丰功伟绩都是从名字来的。</p>
+					<p class="">&emsp;&emsp;所以我们念佛首先要知道佛陀的功德，从《阿弥陀经》来说，里面最突出的一句话就是释迦尼佛说：“我赞叹诸佛不可思议，诸佛也赞叹我不可思议”。释迦牟尼佛在讲阿弥陀佛的故事的时候，其实阿弥陀佛也在讲释迦牟尼佛的故事，诸佛都是互相来告诉众生，那里有一个佛，他怎么伟大，他怎么伟大，你去那里向他学，你会成就什么？</p>
+					<p class="">&emsp;&emsp;所以，从印度净土来说，它是通途法门，它是一个整体，不是一个个体的。所以很多人在修行当中一定要强调，就是佛教不是死后的佛教！一定是活着的佛教。一定是对这个社会，对这个民族有价值的佛教，对人类有贡献的佛教！他不是讲死，他讲现在，他讲全人类，他把人类导向良善的发展，所以佛教才讲因缘果报。因缘果报就是佛教中的善根因缘，所以一定要知道。</p>
+					<div class="uk-text-center" style="margin-top: 40px; margin-bottom: 40px;">
+						<img class="img-width-80" src="./jpg/7.jpg">
+					</div>
+					<p class="">&emsp;&emsp;所以你有善根，遇到阿弥陀佛这个教法，遇到佛教一定要站在阿弥陀佛，就是诸佛的整体，整个佛教来看你的信仰，其实这个净土是大净土。</p>
+					<p class="">&emsp;&emsp;什么叫杂？什么叫不杂？就是你在信仰阿弥陀佛的时候，你在学习他教法的时候，其实你一直怀疑他，一直疑惑他，一直不相信他，乃至于认为这是一个骗局，乃至于认为说，哎呀，这样学有什么意义？</p>
+					<p class="">&emsp;&emsp;任何一件事，当你失去对他的信任之后，对他没有兴趣了以后，即使他最伟大也没有用啊，所以这个一定是很重要的！“信为道源功德母”，你相信阿弥陀佛的这一生的伟大，就像你相信毛主席的伟大，我们一定要知道毛主席打了什么，你不读他的这种伟大的史记，你不知道的，所以电影里一直在演。</p>
+					<p class="">&emsp;&emsp;佛法也是这样的，你相信阿弥陀佛，你不了解他的一生的丰功伟绩的时候，你对他是画有引号的。当你看到他的丰功伟绩的时候，你一直都在呼唤：“阿弥陀佛，阿弥陀佛”的时候，你向他走近的时候，一定要照他教你的做！所以这个叫福德，你有善根接触了佛法，你要有这个福德、福报去做，说白了你得有这个能力去做。你得有能力去亲近佛法。人人能成为雷锋，就看你愿不愿意奉献？人人能成为佛菩萨人间的代表，就看你愿不愿意念佛陀这份功德，为阿弥陀佛做人间的代表？你心中有没有佛？你愿不愿意去做？依教奉行，依着佛陀的教，你去奉行了没有？当你去做了以后，落实到生活当中以后，你有了这种善根福德的这种这种因缘，这种实践的因缘的时候，你能不往生吗？你绝对往生。</p>
+					<p class="">&emsp;&emsp;所以佛教里面没有杂修和不杂修。只有你信不信？如果你相信，你走每一条路都是对的，因为佛陀在那里接引你；如果你不信，你一会儿去念这个经，一会儿去念那个经，一会儿这样做，一会儿那样做。其实就是盲修瞎练，最后就像猴子一样丢了西瓜捡芝麻，最后什么也没捡到。</p>
+					<div class="uk-text-center" style="margin-top: 40px; margin-bottom: 40px;">
+						<img class="img-width-80" src="./jpg/8.jpg">
+					</div>
+					<p class="">&emsp;&emsp;所以简单一点就是说，相信他，学习他，向他那里走，奉献自己，去实践佛法。你就是佛界的众生，你就是阿弥陀佛的孩子，你就是人间的佛陀，你心中一定有佛，你自然会成为佛陀的眷属。</p>
+					<p class="">&emsp;&emsp;所以一定要知道这一点，所以汉传佛教，不管任何一个佛教，南传佛教，藏传佛教，它都强调一个佛教的共同体，就是戒、定、慧。因为持戒你断了一切恶，修一切善，因为你学习教法，稳定了你的信仰，在安定的教义当中，依教奉行当中，实践佛法的行愿，最后能够以这种资粮往生净土的人，这就是佛教徒。所以大家一定要知道。</p>
+					<p class="">&emsp;&emsp;那么这个次第，首先戒的次弟，我们首先就定为三皈、五戒，八戒，十戒，那么出家是比丘戒，那么在家人和出家人这当中也有菩萨戒，菩萨戒里面也有在家菩萨戒，出家菩萨戒，这些戒。根据你现在的戒次，就是根据你的学籍，你现在该做什么，不该做什么。因为这个戒，它有深有浅。</p>
+					<p class="">&emsp;&emsp;所以，刚开始的三皈依，只强调三皈依的内容，五戒只强调五戒的内容，因为一开始人改变是很难的，所以佛教叫逐步改变。有些内容太深了，一下让你做到，你能做到吗？做不到，你如果说你能做到，全是骗人的，打妄语了。所以我们逐步做到，就是断一切恶，修一切善。到什么阶段，你断什么的恶，修什么的善，完了学什么的内容，让自己逐步成长。</p>
+					<p class="">&emsp;&emsp;你一下学特别大的内容，其实就是一种文化思想根本落实不到生活当中去，所以很多佛教徒学佛，他为什么不能落实到生活当中去？因为他一开始学的太大了，一开始就进入大学了，都是空说空谈，你对生活实践一点经验都没有，就像我们说，你没下到基层，你不了解老百姓的痛苦，你怎么学？你怎么修？你怎么来度众生？你怎么往生？</p>
+					<div class="uk-text-center" style="margin-top: 40px; margin-bottom: 40px;">
+						<img class="img-width-80" src="./jpg/9.jpg">
+					</div>
+					<p class="">&emsp;&emsp;所以很多人对佛教很反感，为什么？就是一些佛教徒，他认为他是佛教徒，他所说的，他所做的，他所表达出来的和佛教一点关系都没有，极其恶劣。他只是在高度的理论上在学习，没有实践，没有走下去从底层，就像盖房子一样，没有从基础打起，那个房子是不稳定的，一旦遇到地震，它就会塌了。所以很多人现在就是喜欢高谈阔论，喜欢游戏佛法，这种的佛教徒永远见不到真理。</p>
+					<p class="">&emsp;&emsp;佛教要站在整体看，要站在佛如何定教的次第上去看，你去修的时候，明明白白，清清楚楚，一步是什么，二步是什么，三步是什么？就像考驾驶证一样，你开车一样，你先学会挂档、倒档、入库、爬山、上山，你这样才能过关。不要嘴上说的天花乱坠，到时候真正生死在面前考验你的时候，你一点都生不起这种欢喜心去求生净土，全是烦恼颠倒执着，你怎么能往生净土？让别人看到，你看你这念佛一辈子全是骗人的，你都没有往生，我们怎么能往生？所以这一点一定要知道！</p>
+					<p class="">&emsp;&emsp;我们汉传佛教一部经叫《无比经》，一会儿我会发到那里，因为他那有个次第，那是佛讲的，我们是按这个戒次第走的。所以这些课程呢，都是按中国佛教传统寺庙的课程，尤其我们的课程是针对居士的课程，把整个汉传佛教的显密的内容，咒语啊，经文啊都会有，把这个佛教大净土的概念都要回归到阿弥陀佛那里的，整体的善根，福德，因缘这个概念发挥的淋漓尽致。希望你不盲修，不乱修，有目的地修，明白地修，认真的修，你能够往生，大家看到你的往生，都会求往生，这样佛教才会兴旺。</p>
+					<p class="">&emsp;&emsp;佛教不是死后的佛教，是活灵活现，多姿多彩的佛教，是每一个人都需要的佛教，我想这才是我们的佛陀需要说的话。无量光，无量寿，无量正等正觉。那么大家有什么问题留给导师，导师会及时回答给大家。感恩大家的分享，南无阿弥陀佛，南无阿弥陀佛，南无阿弥陀佛。</p>
+					<div class="uk-text-center" style="margin-top: 40px; margin-bottom: 40px;">
+						<img class="img-width-80" src="./jpg/10.jpg">
+					</div>
+					<p class="">导师开示</p>
+					<p class="">慈念文宣组整理</p>
+
+				</div>
+			</div>
+		</article>
+		<div class="dp-button-row uk-margin-large"></div>
+	</main>
+
+	<script src="../../js_css_files/jquery.min.js"></script>
+	<script src="../../js_css_files/uikit-core.min.js"></script>
+	<script src="../../js_css_files/uikit-icons.min.js"></script>
+	<script src="../../js_css_files/Bacon.min.js"></script>
+	<script src="../../js_css_files/qrcode.min.js"></script>
+	<script src="../../js_css_files/reader.2rssur4x7b79pf.js"></script>
+	<script async="" defer="defer" data-domain="" src="https://plausible.io/js/plausible.js"></script>
+	<script>window.plausible = window.plausible || function () { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
+	<div id="like996_identification"
+		style="background-color: rgba(211, 211, 211, 0.86); align-items: center; justify-content: center; position: fixed; color: black; top: -5em; height: 2em; margin: 0em; padding: 3px 0em 0em; font-size: 20px; width: 100%; left: 0px; right: 0px; text-align: center; z-index: 2147483647; display: none;">
+		Text.</div>
+</body>
+
+</html>

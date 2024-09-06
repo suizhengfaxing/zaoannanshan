@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>超度是不是要经常做？</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,shrink-to-fit=no">
+	<meta name="msapplication-TileColor" content="#ffc40d">
+	<meta name="msapplication-config" content="/dist/browserconfig.xml">
+	<meta name="theme-color" content="#eeeeee">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="translucent">
+	<meta name="format-detection" content="telephone=no">
+	<link rel="stylesheet" href="../../js_css_files/uikit.min.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Noto+Serif+TC:wght@400;700&family=Tinos:ital,wght@0,400;0,700;1,400;1,700&Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Jomolhari&display=swap">
+	<link rel="stylesheet" href="../../js_css_files/reader-uikit.2rssur4x7b79pf.css">
+	<script id="cktools">// ==UserScript==
+		// @name         CKTools
+		// @namespace    ckylin-script-lib-combined-tools
+		// @version      1.6.1
+		// @match        http://*
+		// @match        https://*
+		// @author       CKylinMC
+		// @license      GPLv3 License
+		// ==/UserScript==
+		(function () {
+			const VERSION = 1.6;
+			if ('CKTools' in window) {
+				if (!window.CKTools.ver) console.warn('Unrecognized version of CKTools is already loaded, overwriting...');
+				else if (window.CKTools.ver > VERSION) throw new Error("You have newer version CKTools loaded. Aborting loading version " + VERSION);
+				else console.warn(`You have older version of CKTools (${window.CKTools.ver}) was loaded, and now upgrading to newer version ${VERSION}.`);
+			}
+			class CKTools {
+				static ver = VERSION
+				static get(q, base = document) {
+					return base.querySelector(q);
+				}
+				static getAll(q, base = document) {
+					return [...base.querySelectorAll(q)];
+				}
+				static domHelper(options = {}, compatibleParm2 = {}) {
+					let tagName = 'div';
+					if (typeof (options) == 'string') {
+						/* Migrate from version 1 */
+						tagName = options;
+						/* Migrate from makeDom */
+						if (compatibleParm2.constructor.name == 'Object') options = compatibleParm2;
+						else if (compatibleParm2.constructor.name == 'AsyncFunction') options = {
+							initAsync: compatibleParm2
+						};
+						else if (compatibleParm2.constructor.name == 'Function') options = {
+							init: compatibleParm2
+						};
+						else options = {};
+					}
+					if (options.listeners) {
+						/* Migrate from version 1 */
+						if (!options.on) options.on = {};
+						Object.assign(options.on, options.listeners);
+					}
+					if (options.classnames) {
+						/* Migrate from version 1 */
+						if (!options.classList) options.classList = [];
+						options.classList.concat(options.classnames);
+					}
+					if (options.tag) tagName = options.tag;
+					let el;
+					if (options.from) {
+						if (options.from instanceof HTMLElement) {
+							el = options.from;
+						} else if (typeof (options.from) == "string") {
+							els = domHelper(tagName, {
+								html: options.from
+							});
+							if (els.childElementCount === 0) {
+								el = document.createElement(tagName);
+							} else if (els.childElementCount === 1) {
+								el = els.firstElementChild;
+							} else {
+								el = els;
+							}
+						}
+					} else if (options.query) {
+						const query = document.querySelector(options.query);
+						if (query) el = query;
+						else return null;
+					} else el = document.createElement(tagName);
+					if (options.id) el.id = options.id;
+					if (options.html) el.innerHTML = options.html;
+					if (options.text) el.innerText = options.text;
+					if (options.attr) {
+						for (const ak of Object.keys(options.attr)) {
+							el.setAttribute(ak, options.attr[ak]);
+						}
+					}
+					if (options.cssText) el.style.cssText = options.cssText;
+					if (options.style) Object.assign(el.style, options.style);
+					if (options.css) Object.assign(el.style, options.css);
+					if (options.childs) {
+						if (options.childs instanceof Array) options.childs.filter(el => !!el).forEach(child => {
+							if (child instanceof HTMLElement) el.appendChild(child);
+							else if (child.hasOwnProperty('type') && child.hasOwnProperty('content')) {
+								switch (child.type) {
+									case 'html': {
+										arguments.callee('span', {
+											from: child.content,
+											append: el
+										});
+									}
+										break;
+									case 'style': {
+										const scoped = child.hasOwnProperty('scoped') && !!child.scoped;
+										arguments.callee('style', {
+											html: child.content,
+											append: el,
+											attr: {
+												scoped
+											}
+										});
+									}
+										break;
+									default:
+										el.appendChild(arguments.callee(child.type, child.content));
+								}
+							} else el.appendChild(document.createTextNode(child));
+						});
+						else if (options.childs instanceof HTMLElement) el.appendChild(options.childs);
+						else el.appendChild(document.createTextNode(options.childs));
+					}
+					if (options.classlist) {
+						if (options.classlist instanceof Array) options.classlist.forEach(classname => {
+							el.classList.add(classname);
+						});
+						else el.classList.add(...options.classlist.split(" "));
+					}
+					if (options.classList) {
+						if (options.classList instanceof Array) options.classList.forEach(classname => {
+							el.classList.add(classname);
+						});
+						else el.classList.add(...options.classList.split(" "));
+					}
+					if (options.on) {
+						for (let listenerName of Object.keys(options.on)) {
+							el.addEventListener(listenerName, options.on[listenerName]);
+						}
+					}
+					if (options.off) {
+						for (let listenerName of Object.keys(options.of)) {
+							el.removeEventListener(listenerName, options.off[listenerName]);
+						}
+					}
+					if (options.bind) {
+						const serverName = "$bindingserver" + Math.floor(Math.random() * 100000);
+						const bindings = CKTools.deepClone(options.bind);
+						const unbindProperty = (prop) => bindings[prop] = undefined;
+						const unbindAllProperties = () => el[serverName].disconnect();
+						el[serverName] = new MutationObserver(mutations => {
+							for (const mutation in mutations) {
+								if (bindings.hasOwnProperty(mutation.attributeName)) {
+									try {
+										bindings[mutation.attributeName]({
+											target: mutation.target,
+											attributeName: mutation.attributeName,
+											attributeNamespace: mutation.attributeNamespace,
+											oldValue: mutation.oldValue,
+											newValue: mutation.target.getAttribute(mutation.attributeName) || undefined,
+											unbind: () => unbindProperty(mutation.attributeName),
+											stopListen: () => (unbindAllProperties(), el[serverName] = undefined)
+										});
+									} catch (e) { }
+								}
+							}
+						});
+						el.addEventListener('DOMNodeRemoved', () => (unbindAllProperties(), el[serverName] = undefined));
+						el[serverName].observe(el, {
+							attributes: true,
+							attributeOldValue: true
+						});
+					}
+					if (options.append && options.append instanceof HTMLElement) options.append.appendChild(el);
+					if (options.insertBefore && insertBefore instanceof HTMLElement) options.insertBefore.parentNode.insertBefore(el, options.insertBefore);
+					if (options.insertAfter && insertAfter instanceof HTMLElement) options.insertAfter.parentNode.insertAfter(el, options.insertAfter);
+					if (options.init && options.init instanceof Function) options.init(el);
+					if (options.initAsync && options.initAsync instanceof Function) {
+						return options.initAsync(el).then(() => el);
+					}
+					return el;
+				}
+				static makeDom() {
+					console.warn('"makeDom" has been deprecated. Redirecting to "domHelper"...');
+					return CKTools.domHelper(...arguments);
+				}
+				static addDom(item) {
+					const make = (tag = 'div') => document.createElement(tag);
+					const txt = (it = '') => document.createTextNode(it);
+					class DOMItem {
+						constructor(it = '') {
+							this.setItem(it);
+						}
+						setItem(it = '') {
+							if (typeof it === 'string' || it instanceof String) {
+								this.el = txt(it);
+							} else if (it instanceof HTMLElement) {
+								this.el = it;
+							} else this.el = txt(it.toString());
+							if (!this.target) this.target = document.body;
+							this.mode = 'child';
+							return this;
+						}
+						inside(q = document.body) {
+							this.mode = 'child';
+							if (q instanceof HTMLElement) {
+								this.target = q;
+							} else if (typeof q === 'string' || q instanceof String) {
+								const ql = this.target.querySelector(q);
+								if (ql) this.target = ql;
+							}
+							return this;
+						}
+						after(a = null) {
+							this.mode = 'child-after';
+							if (a instanceof HTMLElement) {
+								this.after = a;
+							} else if (typeof a === 'string' || a instanceof String) {
+								const al = this.target.querySelector(a);
+								if (al) this.after = al;
+							}
+							return this;
+						}
+						before(a = null) {
+							this.mode = 'child-before';
+							if (a instanceof HTMLElement) {
+								this.before = a;
+							} else if (typeof a === 'string' || a instanceof String) {
+								const al = this.target.querySelector(a);
+								if (al) this.before = al;
+							}
+							return this;
+						}
+						done() {
+							switch (this.mode) {
+								case "child": {
+									if (this.el && this.target)
+										this.target.appendChild(this.el);
+								}
+									break;
+								case "child-before": {
+									if (this.el && this.target && this.before)
+										this.target.insertBefore(this.el, this.before);
+								}
+									break;
+								case "child-after": {
+									if (this.el && this.target && this.after)
+										this.target.insertBefore(this.el, this.after.nextSibling);
+								}
+									break;
+							}
+						}
+					}
+					return new DOMItem(item);
+				}
+				static deepClone(obj) {
+					let newObject = {};
+					if (Array.isArray(obj)) {
+						newObject = [];
+						for (let i = 0; i < obj.length; i++) {
+							newObject.push(CKTools.deepClone(obj[i]));
+						}
+						return newObject;
+					}
+					Object.keys(obj).map(key => {
+						if (typeof obj[key] === 'object') {
+							newObject[key] = CKTools.deepClone(obj[key]);
+						} else {
+							newObject[key] = obj[key];
+						}
+					});
+					return newObject;
+				}
+				static getCookie(name) {
+					const value = `; ${document.cookie}`;
+					const parts = value.split(`; ${name}=`);
+					if (parts.length === 2) return parts.pop().split(';').shift();
+				}
+				static clearAllCookies() {
+					return document.cookie.split(';').forEach(cookie => document.cookie = cookie.replace(/^ +/, '').replace(/=.*/, `=;expires=${new Date(0).toUTCString()};path=/`));
+				}
+				static getUrlParam(key) {
+					return (new URL(location.href)).searchParams.get(key);
+				}
+				static wait(ms) {
+					return new Promise(r => setTimeout(r, ms));
+				}
+				static async waitForDom(query, domparent = document, maxRetries = 20, gagms = 200) {
+					let i = maxRetries;
+					while (--i > 0) {
+						if (domparent.querySelector(query)) return true;
+						await CKTools.wait(gagms);
+					}
+					return false;
+				}
+				static async waitForAttribute(q, attr) {
+					let i = 50;
+					let value;
+					while (--i >= 0) {
+						if ((attr in q) &&
+							q[attr] != null) {
+							value = q[attr];
+							break;
+						}
+						await wait(100);
+					}
+					return value;
+				}
+				static async waitForPageVisible() {
+					if (document.hidden) return true;
+					return new Promise(r => {
+						const handler = () => {
+							r(true);
+							document.removeEventListener('visibilitychange', handler);
+						};
+						document.addEventListener("visibilitychange", handler)
+					});
+				}
+				static clearStyles(className = "injectedStyle") {
+					let dom = document.querySelectorAll("style." + className);
+					if (dom) [...dom].forEach(e => e.remove());
+				}
+				static addStyle(s, className = "injectedStyle", mode = "append", injectBase = document.head) {
+					switch (mode) {
+						default:
+						case "append":
+							break;
+						case "unique":
+							if (document.querySelector("style." + className)) return;
+							break;
+						case "update":
+							CKTools.clearStyles(className);
+							break;
+					}
+					let style = document.createElement("style");
+					style.classList.add(className);
+					style.innerHTML = s;
+					injectBase.appendChild(style);
+				}
+				// stackoverflow
+				static debounce(func, timeout = 300) {
+					let timer;
+					return (...args) => {
+						clearTimeout(timer);
+						timer = setTimeout(() => {
+							func.apply(this, args);
+						}, timeout);
+					};
+				}
+				static throttle(callback, limit) {
+					var waiting = false;
+					return function () {
+						if (!waiting) {
+							callback.apply(this, arguments);
+							waiting = true;
+							setTimeout(function () {
+								waiting = false;
+							}, limit);
+						}
+					}
+				}
+				static domContains(selector, text) {
+					var elements = document.querySelectorAll(selector);
+					return [].filter.call(elements, function (element) {
+						return RegExp(text).test(element.textContent);
+					});
+				}
+				static mapReplace(str, map) {
+					//reference: https://segmentfault.com/q/1010000023489916 answer-2
+					const replace = ({
+						str,
+						reg,
+						replacer
+					}) =>
+						str.replace(new RegExp(reg, 'g'), replacer);
+					return Object.keys(map).reduce((str, reg) => replace({
+						str,
+						reg,
+						replacer: map[reg]
+					}), str);
+				}
+				static padStart(num, count = 2) {
+					return (('' + Math.pow(10, count)).substr(1) + num).slice(-1 * Math.max(count, ('' + num).length));
+				}
+				static fixNum(num, fix = 0) {
+					return Math.floor(num * (Math.pow(10, fix))) / (Math.pow(10, fix));
+				}
+				static random = class {
+					static hex() {
+						return `#${Math.floor(Math.random() * 0xffffff).toString(16).padEnd(6, "0")}`;
+					}
+					static shuffleArray(arr) {
+						return arr.sort(() => 0.5 - Math.random());
+					}
+					static num(min, max) {
+						return Math.random() * (max - min) + min;
+					}
+					static fromArray(arr = []) {
+						return arr[Math.floor(CKTools.random.num(0, arr.length))];
+					}
+					static from(...args) {
+						return CKTools.random.fromArray(args);
+					}
+				}
+				static is = class {
+					static str(s) {
+						return (s != null && (typeof s === "string" || s instanceof String));
+					}
+					static elementInViewport(el) {
+						var rect = el.getBoundingClientRect();
+						return (
+							rect.top >= 0 &&
+							rect.left >= 0 &&
+							rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+							rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+						);
+					}
+					static asyncFn(fn) {
+						return fn.constructor.name === "AsyncFunction";
+					}
+					static darkMode() {
+						return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+					}
+				}
+				static modal = class {
+					static openModal(title = '', content) {
+						CKTools.modal.blockWindow();
+						let modal = CKTools.get("#CKTOOLS-modal");
+						if (!modal) modal = CKTools.modal.initModal();
+						modal.setTitle(title);
+						modal.setContent(content);
+						modal.show();
+					}
+					static isModalShowing() {
+						let modal = CKTools.get("#CKTOOLS-modal");
+						if (modal) return modal.classList.contains("show");
+						else return false;
+					}
+					static hideModal() {
+						CKTools.modal.blockWindow(false);
+						let modal = CKTools.get("#CKTOOLS-modal");
+						if (modal) modal.hide();
+					}
+					static initModal() {
+						CKTools.addStyle(`
+				#CKTOOLS-modal{
+					position: fixed;
+					z-index: 99010;
+					top: 50%;
+					left: 50%;
+					width: 300px;
+					width: 30vw;
+					/*height: 300px;
+					height: 50vh;*/
+					background: white;
+					border-radius: 8px;
+					padding: 12px;
+					transform: translate(-50%,-50%);
+					transition: all .3s;
+					box-shadow: 0 2px 8px grey;
+				}
+				#CKTOOLS-modal.show{
+					opacity: 1;
+					transform: translate(-50%,-50%) scale(1);
+				}
+				#CKTOOLS-modal.hide{
+					opacity: 0;
+					pointer-events: none;
+					transform: translate(-50%,-50%) scale(0.9);
+				}
+				.CKTOOLS-modal-title{
+					font-size: large;
+				}
+				.CKTOOLS-modal-content{
+					font-size: medium;
+				}
+				.CKTOOLS-modal-content>div{
+					display: flex;
+					margin: 6px 10px;
+					flex-wrap: wrap;
+					flex-direction: column;
+					align-content: space-around;
+					justify-content: space-between;
+					align-items: center;
+				}
+				.CKTOOLS-toolbar-btns{
+					flex: 1;
+					border: none;
+					background: #2196f3;
+					border-radius: 3px;
+					margin: 0 6px;
+					padding: 3px;
+					color: white;
+					box-shadow: 0 2px 3px grey;
+					min-width: 60px;
+				}
+				.CKTOOLS-toolbar-btns:hover{
+					filter: brightness(0.85);
+				}
+				`, "CKTOOLS-modal-css", "unique");
+						const modal = document.createElement("div");
+						modal.id = "CKTOOLS-modal";
+						modal.className = "hide";
+
+						const header = document.createElement("h2");
+						header.className = "CKTOOLS-modal-title"
+						modal.appendChild(header);
+
+						modal.setTitle = (t = '') => {
+							header.innerHTML = t;
+						}
+
+						const contents = document.createElement("div");
+						contents.className = "CKTOOLS-modal-content";
+						modal.appendChild(contents);
+
+						modal.setContent = async (c) => {
+							let ct = c;
+							if (ct instanceof Function) {
+								ct = await ct();
+							}
+							if (ct instanceof HTMLElement) {
+								contents.innerHTML = '';
+								contents.appendChild(ct);
+								return;
+							}
+							if (typeof (ct) === "string") {
+								contents.innerHTML = ct;
+								return;
+							}
+							console.log("unknown: ", ct);
+						}
+						modal.addContent = async (c) => {
+							let ct = c;
+							if (ct instanceof Function) {
+								ct = await ct();
+							}
+							if (ct instanceof HTMLElement) {
+								contents.appendChild(ct);
+								return;
+							}
+							if (ct instanceof String) {
+								contents.innerHTML += ct;
+								return;
+							}
+							console.log("unknown: ", ct);
+						}
+
+						modal.close = CKTools.modal.closeModal;
+						modal.open = CKTools.modal.openModal;
+						modal.show = () => {
+							modal.className = "show";
+						}
+						modal.hide = () => {
+							modal.className = "hide";
+						}
+
+						document.body.appendChild(modal);
+						return modal;
+					}
+					static closeModal() {
+						CKTools.modal.blockWindow(false);
+						let modal = CKTools.get("#CKTOOLS-modal");
+						if (modal) modal.remove();
+					}
+					static async alertModal(title = "", content = "", okbtn = null) {
+						if (CKTools.modal.isModalShowing()) {
+							CKTools.modal.hideModal();
+							await CKTools.wait(200);
+						}
+						CKTools.modal.openModal(title, await CKTools.domHelper("div", async container => {
+							container.appendChild(await CKTools.domHelper("div", tip => {
+								tip.innerHTML = content;
+							}))
+							if (okbtn !== null)
+								container.appendChild(await CKTools.domHelper("div", async btns => {
+									btns.style.display = "flex";
+									btns.appendChild(await CKTools.domHelper("button", btn => {
+										btn.className = "CKTOOLS-toolbar-btns";
+										btn.innerHTML = okbtn;
+										btn.onclick = e => CKTools.modal.hideModal();
+									}))
+								}))
+						}))
+						await CKTools.wait(300);
+					}
+					static blockWindow(block = true) {
+						CKTools.addStyle(`
+				#CKTOOLS-blockWindow{
+					z-index: 99005;
+					display: block;
+					background: #00000080;
+					opacity: 0;
+					transition: all .3s;
+					position: fixed;
+					left: 0;
+					top: 0;
+					width: 100vw;
+					height: 100vh;
+				}
+				#CKTOOLS-blockWindow.hide{
+					pointer-events: none;
+					opacity: 0;
+				}
+				#CKTOOLS-blockWindow.show{
+					opacity: 1;
+				}
+				`, "CKTOOLS-blockWindow-css", "unique");
+						let dom = CKTools.get("#CKTOOLS-blockWindow");
+						if (!dom) {
+							dom = document.createElement("div");
+							dom.id = "CKTOOLS-blockWindow";
+							dom.className = "hide";
+							document.body.appendChild(dom);
+						}
+						if (block) {
+							dom.className = "show";
+						} else {
+							dom.className = "hide";
+						}
+					}
+				}
+
+				static EventEmitter = class {
+					handlers = {};
+					on(name, func) {
+						if (!(func instanceof Function)) throw "Param must be func!";
+						if (!(name in this.handlers)) {
+							this.handlers[name] = [];
+						}
+						this.handlers[name].push(func);
+					}
+					off(name, func) {
+						if (!(func instanceof Function)) throw "Param must be func!";
+						if (name in this.handlers) {
+							for (let i = 0; i < this.handlers[name].length; i++) {
+								if (this.handlers[name][i] === func) {
+									this.handlers[name].splice(i, 1);
+									i--;
+								}
+							}
+						}
+					}
+					clean(name) {
+						if (name in this.handlers) {
+							this.handlers[name] = [];
+						}
+					}
+					emit(name, ...args) {
+						if (name in this.handlers) {
+							for (let func of this.handlers[name]) {
+								try {
+									func(...args);
+								} catch (e) {
+									console.error('ERROR:', e);
+								}
+							}
+						}
+					}
+				}
+				static HoldClick = class {
+					dom;
+					emitter = new CKTools.EventEmitter;
+					downTime = 0;
+					holdingTime = 250;
+					mouseDown = false;
+
+					constructor(dom, holdingTime = 250) {
+						this.bind(dom);
+						this.holdingTime = holdingTime;
+					}
+
+					bind(dom) {
+						if (this.dom) {
+							this.unregListeners();
+						}
+						if (dom instanceof HTMLElement) {
+							this.dom = dom;
+							this.initListener();
+						}
+					}
+
+					onclick(func) {
+						this.emitter.on("click", func);
+						return this;
+					}
+
+					onhold(func) {
+						this.emitter.on("hold", func);
+						return this;
+					}
+
+					onup(func) {
+						this.emitter.on("up", func);
+						return this;
+					}
+
+					offclick(func) {
+						this.emitter.off("click", func);
+						return this;
+					}
+
+					offhold(func) {
+						this.emitter.off("hold", func);
+						return this;
+					}
+
+					offup(func) {
+						this.emitter.off("up", func);
+						return this;
+					}
+
+					resetCallback(name = "all") {
+						const allEv = ["click", "hold", "up"];
+						if (name === "all") {
+							allEv.forEach(e => this.emitter.clean(e));
+						} else if (allEv.includes(name)) {
+							this.emitter.clean(name);
+						}
+					}
+
+					unregListeners() {
+						this.dom.removeEventListener("mouseup", this.handleMouseUp.bind(this));
+						this.dom.removeEventListener("mousedown", this.handleMouseDown.bind(this));
+						this.dom.removeEventListener("mouseout", this.handleMouseOut.bind(this));
+					}
+
+					uninstall() {
+						this.resetCallback();
+						this.unregListeners();
+					}
+
+					handleMouseDown(e) {
+						if (e.button !== 0 && e.button !== 1) return;
+						e.preventDefault();
+						this.mouseDown = true;
+						this.downTime = (new Date()).getTime();
+						setTimeout(() => {
+							if (this.mouseDown) {
+								console.log(this);
+								this.mouseDown = false;
+								this.downTime = 0;
+								this.emitter.emit("hold", e);
+							}
+						}, this.holdingTime)
+					}
+
+					handleMouseUp(e) {
+						if (e.button !== 0 && e.button !== 1) return;
+						e.preventDefault();
+						if (this.mouseDown) {
+							this.mouseDown = false;
+							const currTime = (new Date).getTime();
+							if ((currTime - this.downTime) >= this.holdingTime) {
+								this.emitter.emit("hold", e);
+							} else {
+								this.emitter.emit("click", e);
+							}
+							this.downTime = 0;
+						}
+						this.emitter.emit("up", e);
+					}
+
+					handleMouseOut(e) {
+						e.preventDefault();
+						if (this.mouseDown) {
+							this.mouseDown = false;
+							this.downTime = 0;
+							this.emitter.emit("hold", e);
+						}
+					}
+
+					initListener() {
+						this.dom.addEventListener("mouseup", this.handleMouseUp.bind(this))
+						this.dom.addEventListener("mousedown", this.handleMouseDown.bind(this))
+						this.dom.addEventListener("mouseout", this.handleMouseOut.bind(this))
+					}
+				}
+				static dragger = class {
+					static defaultHandler(val) {
+						return console.log("DRAG:", val);
+					}
+					static async waitForDragger(waitStatus = true) {
+						while (CKTools.dragger.dragging !== waitStatus) await CKTools.wait(10);
+						return CKTools.dragger;
+					}
+					static async regHandler(func) {
+						if (!(func instanceof Function)) throw "Param must be a func!";
+						await CKTools.dragger.waitForDragger(false);
+						CKTools.dragger.handler = func;
+						return CKTools.dragger;
+					}
+					static handler() { }
+					static dragging = false;
+					static initialDragData = {
+						x: 0,
+						y: 0
+					}
+					static lastDragData = {
+						x: 0,
+						y: 0
+					}
+					static startDrag(e) {
+						if (CKTools.dragger.dragging) return;
+						CKTools.dragger.dragging = true;
+						console.log(CKTools.dragger.initialDragData);
+						CKTools.dragger.initialDragData.x = e.screenX;
+						CKTools.dragger.initialDragData.y = e.screenY;
+						CKTools.dragger.lastDragData.x = e.screenX;
+						CKTools.dragger.lastDragData.y = e.screenY;
+						document.body.addEventListener("mouseup", CKTools.dragger.stopDrag);
+						document.body.addEventListener("mousemove", CKTools.dragger.handleDrag);
+						console.info("DRAG:", "Start Drag");
+						return CKTools.dragger;
+					}
+					static handleDrag(e) {
+						const currPos = {
+							x: e.screenX,
+							y: e.screenY
+						};
+						const initPos = CKTools.dragger.initialDragData;
+						const delta = {
+							x: initPos.x - currPos.x,
+							y: initPos.y - currPos.y
+						}
+						const lastdelta = {
+							x: CKTools.dragger.lastDragData.x - currPos.x,
+							y: CKTools.dragger.lastDragData.y - currPos.y
+						}
+						CKTools.dragger.lastDragData = currPos;
+						CKTools.dragger.handler(delta, lastdelta);
+					}
+					static stopDrag() {
+						document.body.removeEventListener("mouseup", CKTools.dragger.stopDrag);
+						document.body.removeEventListener("mousemove", CKTools.dragger.handleDrag);
+						CKTools.dragger.handler = CKTools.dragger.defaultHandler;
+						console.info("DRAG:", "Stop Drag");
+						CKTools.dragger.dragging = false;
+						return CKTools.dragger;
+					}
+				}
+				static GUID = class {
+					static S4() {
+						return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+					}
+					static get() {
+						let S4 = CKTools.GUID.S4;
+						return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
+					}
+					static getShort() {
+						let S4 = CKTools.GUID.S4;
+						return (S4() + S4() + S4() + S4());
+					}
+				}
+			}
+			window.CKTools = CKTools;
+		})();
+	</script>
+	<style class="showav_dragablecss">
+		#CKTOOLS-modal {
+			width: fit-content !important;
+			max-width: 80% !important;
+		}
+
+		.CKTOOLS-modal-content li label b {
+			color: green !important;
+		}
+
+		.CKTOOLS-modal-content li label span {
+			color: red !important;
+		}
+
+		.showav_menuitem {
+			line-height: 2em;
+			width: 100%;
+			transition: all .3s;
+			cursor: pointer;
+		}
+
+		.showav_menuitem:hover {
+			transform: translateX(6px);
+		}
+
+		.showav_menuitem>label {
+			font-weight: bold;
+			font-size: large;
+			display: block;
+		}
+	</style>
+	<style class="showav_css_patch">
+		#CKTOOLS-modal li,
+		#CKTOOLS-modal ul {
+			list-style: none !important;
+		}
+	</style>
+</head>
+
+<body style="">
+	<div class="uk-sticky-placeholder" style="height: 0px; width: 0px; margin: 0px;"></div>
+	<header uk-sticky="sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky"
+		class="uk-sticky uk-sticky-fixed uk-sticky-below" style="position: sticky; top: 0px;">
+		<nav class="uk-navbar-container frostingGlass uk-navbar uk-navbar-sticky" uk-navbar="" style="">
+			<div class="uk-navbar-left uk-overflow-hidden">
+				<ul class="uk-navbar-nav uk-margin-small-left uk-margin-small-right">
+					<li>
+						<button id="nav_home" class="uk-icon-button uk-icon" uk-icon="home" type="button">
+							<svg width="20" height="20" viewBox="0 0 20 20">
+								<polygon points="18.65 11.35 10 2.71 1.35 11.35 0.65 10.65 10 1.29 19.35 10.65">
+								</polygon>
+								<polygon points="15 4 18 4 18 7 17 7 17 5 15 5"></polygon>
+								<polygon
+									points="3 11 4 11 4 18 7 18 7 12 12 12 12 18 16 18 16 11 17 11 17 19 11 19 11 13 8 13 8 19 3 19">
+								</polygon>
+							</svg>
+						</button>
+					</li>
+					<li id="nav_title" class="uk-navbar-item uk-text-nowrap uk-overflow-hidden">超度是不是要经常做？</li>
+				</ul>
+			</div>
+		</nav>
+	</header>
+
+	<main class="uk-container uk-container-xsmall" style="margin-bottom: 0px;">
+		<h1 id="title" class="uk-text-center songti" style="margin-bottom: 80px;margin-top: 0px;">超度是不是要经常做？</h1>
+		<article class="cbeta">
+			<div id="body">
+				<div class="uk-text-center" style="margin-top: 40px; margin-bottom: 40px;">
+					<img class="img-width-80" src="./jpg/1.jpg">
+				</div>
+				<div class="uk-text-center" style="margin-top: 40px; margin-bottom: 40px;">
+					<audio src="./m4a/超度是不是要经常做？.m4a" controls></audio>
+				</div>
+				<div class="div-jing">
+					<p class="">&emsp;&emsp;“早安南山，幸福答疑！”各位家人们早上好！我看到有我们的家人提出说“有的师兄参加超度参加一次，有的参加很多次，每次都参加，马上就七月十五了，请导师开示，这两个有没有什么区别？”</p>
+					<p class="">&emsp;&emsp;我觉得从个人经历上来说呢，就是说如果你时间有限，经济有限，或者是各方面的原因，我觉得你能来参加一次，这个已经是功德无量的事了。就是佛教讲这个发心，你能发起这一念善心，我觉得就具备这个因素，具备这个因了，就是具备这个种子了，他将来会一定成就的！</p>
+					<p class="">&emsp;&emsp;那有的人呢，他时间也比较充足，那他可能参加很多次，每次都来，我觉得有时候说超度也好，超拔也好，超荐也好，最重要的是叫“度亡安身”。就是亡者得到超度，往生极乐世界，能够让活着也能安身，让活着的人生着的人能够安心，所以我们称谓说他往安心之旅。</p>
+					<p class="">&emsp;&emsp;我觉得这一方面，圣严法师给了两句话：“就是活着的人能够把心安定下来，让他活的更快乐，离去的人能够凭此力量往生净土！超拔他的生生世世的罪业能够让他蒙福！”我觉得这个很重要！</p>
+					<div class="uk-text-center" style="margin-top: 40px; margin-bottom: 40px;">
+						<img class="img-width-80" src="./jpg/2.jpg">
+					</div>
+					<p class="">&emsp;&emsp;那么讲到超度或者超拔，或者超荐这个事儿的话，其实蛮复杂的。因为每个人的因缘不同，每个人这个死亡的过程不同，每个人的这个因果不同，所以很难说是一次他就受益呢？还是多次他才受益？这加之人的轮回当中生生世世的，我们经常说七世父母冤亲债主，影响我们的还是挺多的。</p>
+					<p class="">&emsp;&emsp;除非你就是菩萨再来，乘愿再来，度众的，你心念一起，回向的力量很大。凡夫呢，我觉得力量很小很小的，按《地藏经》来说，修十分功德，你真正回向到亡者那里只有三分，真正的发心这个人，他得七分。从这个角度来说，我觉得还是多做比较为宜。任何一件事就是积少成多，慢慢去积累。</p>
+					<p class="">&emsp;&emsp;一个小孩长大也不是一天长大的。一个人超度他也是各种因缘的，只要因缘不具足，我想他很难生欢喜心。比如说你去度他，他还有未了事，你去度他，因缘不具足，中阴因缘不具足，那就需要一度、二度、三度。所以我们觉得祝福的人，不管是离我们多久，不管是他是生的还是死，还是怎么样，我们只要牵挂他，就去参加这种清明法会啊，这个普度法会啊，去利益他。我觉得最受益的其实还是自己！</p>
+					<div class="uk-text-center" style="margin-top: 40px; margin-bottom: 40px;">
+						<img class="img-width-80" src="./jpg/3.jpg">
+					</div>
+					<p class="">&emsp;&emsp;所以，中国人也有通过这个祭祀，也是一种教育，所以第二个也是一种教育。就是首先来说，这个往生者往生没有？就是离开这个老人往生没往生，这是一回事。还有通过这个祭祀提醒后代子女孝道优先。所以儒家就是“事生如事死，事死如事生”，你活着的时候一定要孝顺他，死了以后也是这样，活着不孝顺他，死了也是这样。所以儒家一直很讲这个“事死如事生”，就是你对他的这份爱，就是恩德，一定是贯穿你一生的。</p>
+					<p class="">&emsp;&emsp;那么对孩子的教育也是这样的，我觉得这属于家族家庭农耕文化的一种特色，或者主根文化的信仰的一种特色。你什么都不信，但是你要相信你的祖先，他是历史上真正存在的人，他是历史上真正为你们做事的这些人，一代一代这样把祖先这种信仰文化、主根文化传播下来，我觉得这个也是很有意义的！如果一个民族没有传承，对他的先辈不了解，对他的历史不了解，对他的文化不了解，很难说它是个独立的民族。你这个教育意义我觉得很大。</p>
+					<div class="uk-text-center" style="margin-top: 40px; margin-bottom: 40px;">
+						<img class="img-width-80" src="./jpg/4.jpg">
+					</div>
+					<p class="">&emsp;&emsp;我个人更重视这个教育的意义。就是你带着孩子去参加你父亲或者你的冤亲债主，或者历代祖先的这个祭祀、超拔的时候，孩子们慢慢他也会养成这种记忆。慢慢等你往生了以后，他也会把你纪念起来，以这种形式去纪念他。我觉得我们经常说能为他做点什么，你能为他做的就是纪念他，超度他，把功德回向给他。让他受益，他永远活在你心里，让他变成你榜样的力量，让他变成你的文化，变成你的动力，变成中华民族前进的勇气，我觉得这个很重要！</p>
+					<p class="">&emsp;&emsp;所以，第三点就是说你也不相信你的祖先，没有不可能的是，一个人不相信祖先，你从哪里来对吧？父母尚在，前有来处对吧？父母在，你还有个来处，父母不在了，你就孤苦无依。所以，纪念父母是我莫大的孝心！不管你活着怎么样，但是我觉得你把这种孝、善良和爱传递下去，这是一个民族的脊梁，也是一种希望！因为这一点，我觉得印光大师说“加大女性的教育”，这一点妈妈是至关重要的！像我小时候，我父亲就是每次祭祀都去，但是整个祭祀做供菜啊，布置啊，都是我妈妈在做，这个是真的是很重要，很重要！所以没有说哪个更受益，哪个不受益。</p>
+					<p class="">&emsp;&emsp;第一个，你把这份爱一定要传递下去，让祖先爱你，你爱祖先，让祖先早日解脱，我觉得非常好。</p>
+					<p class="">&emsp;&emsp;第二个，是文化教育。我们把孝道教育延续下来，祖祖辈辈的这种根源文化，让我们有民族自信感，这种教育延伸很重要，就是民族的脊梁。</p>
+					<p class="">&emsp;&emsp;第三个，我觉得人之所以为人，他是有文化思想的。文化的载体，我觉得很多人说人死了还祭祀他什么？文化的载体就是一代一代的这种传承经验积累！我觉得这就是一种回馈。羊喝奶的时候还要跪下喝的，对吧？虽然狗那么乱，但也不和母亲交配，对吧？都有这个意义，连动物都有，何况人呢？</p>
+					<p class="">&emsp;&emsp;所以我觉得不需要想超度几次，也不需要想我要不要超度！只要你有时间有空闲，没有时间障碍，没有空间障碍，经济上没有障碍，你就来尽管的参加就挺好！</p>
+					<div class="uk-text-center" style="margin-top: 40px; margin-bottom: 40px;">
+						<img class="img-width-80" src="./jpg/5.jpg">
+					</div>
+					<p class="">导师开示</p>
+					<p class="">慈念文宣组整理</p>
+				</div>
+			</div>
+		</article>
+		<div class="dp-button-row uk-margin-large"></div>
+	</main>
+
+	<script src="../../js_css_files/jquery.min.js"></script>
+	<script src="../../js_css_files/uikit-core.min.js"></script>
+	<script src="../../js_css_files/uikit-icons.min.js"></script>
+	<script src="../../js_css_files/Bacon.min.js"></script>
+	<script src="../../js_css_files/qrcode.min.js"></script>
+	<script src="../../js_css_files/reader.2rssur4x7b79pf.js"></script>
+	<script async="" defer="defer" data-domain="" src="https://plausible.io/js/plausible.js"></script>
+	<script>window.plausible = window.plausible || function () { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
+	<div id="like996_identification"
+		style="background-color: rgba(211, 211, 211, 0.86); align-items: center; justify-content: center; position: fixed; color: black; top: -5em; height: 2em; margin: 0em; padding: 3px 0em 0em; font-size: 20px; width: 100%; left: 0px; right: 0px; text-align: center; z-index: 2147483647; display: none;">
+		Text.</div>
+</body>
+
+</html>

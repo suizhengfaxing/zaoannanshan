@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>缘起法是唯一的真理</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,shrink-to-fit=no">
+	<meta name="msapplication-TileColor" content="#ffc40d">
+	<meta name="msapplication-config" content="/dist/browserconfig.xml">
+	<meta name="theme-color" content="#eeeeee">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="translucent">
+	<meta name="format-detection" content="telephone=no">
+	<link rel="stylesheet" href="../../js_css_files/uikit.min.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Noto+Serif+TC:wght@400;700&family=Tinos:ital,wght@0,400;0,700;1,400;1,700&Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Jomolhari&display=swap">
+	<link rel="stylesheet" href="../../js_css_files/reader-uikit.2rssur4x7b79pf.css">
+	<script id="cktools">// ==UserScript==
+		// @name         CKTools
+		// @namespace    ckylin-script-lib-combined-tools
+		// @version      1.6.1
+		// @match        http://*
+		// @match        https://*
+		// @author       CKylinMC
+		// @license      GPLv3 License
+		// ==/UserScript==
+		(function () {
+			const VERSION = 1.6;
+			if ('CKTools' in window) {
+				if (!window.CKTools.ver) console.warn('Unrecognized version of CKTools is already loaded, overwriting...');
+				else if (window.CKTools.ver > VERSION) throw new Error("You have newer version CKTools loaded. Aborting loading version " + VERSION);
+				else console.warn(`You have older version of CKTools (${window.CKTools.ver}) was loaded, and now upgrading to newer version ${VERSION}.`);
+			}
+			class CKTools {
+				static ver = VERSION
+				static get(q, base = document) {
+					return base.querySelector(q);
+				}
+				static getAll(q, base = document) {
+					return [...base.querySelectorAll(q)];
+				}
+				static domHelper(options = {}, compatibleParm2 = {}) {
+					let tagName = 'div';
+					if (typeof (options) == 'string') {
+						/* Migrate from version 1 */
+						tagName = options;
+						/* Migrate from makeDom */
+						if (compatibleParm2.constructor.name == 'Object') options = compatibleParm2;
+						else if (compatibleParm2.constructor.name == 'AsyncFunction') options = {
+							initAsync: compatibleParm2
+						};
+						else if (compatibleParm2.constructor.name == 'Function') options = {
+							init: compatibleParm2
+						};
+						else options = {};
+					}
+					if (options.listeners) {
+						/* Migrate from version 1 */
+						if (!options.on) options.on = {};
+						Object.assign(options.on, options.listeners);
+					}
+					if (options.classnames) {
+						/* Migrate from version 1 */
+						if (!options.classList) options.classList = [];
+						options.classList.concat(options.classnames);
+					}
+					if (options.tag) tagName = options.tag;
+					let el;
+					if (options.from) {
+						if (options.from instanceof HTMLElement) {
+							el = options.from;
+						} else if (typeof (options.from) == "string") {
+							els = domHelper(tagName, {
+								html: options.from
+							});
+							if (els.childElementCount === 0) {
+								el = document.createElement(tagName);
+							} else if (els.childElementCount === 1) {
+								el = els.firstElementChild;
+							} else {
+								el = els;
+							}
+						}
+					} else if (options.query) {
+						const query = document.querySelector(options.query);
+						if (query) el = query;
+						else return null;
+					} else el = document.createElement(tagName);
+					if (options.id) el.id = options.id;
+					if (options.html) el.innerHTML = options.html;
+					if (options.text) el.innerText = options.text;
+					if (options.attr) {
+						for (const ak of Object.keys(options.attr)) {
+							el.setAttribute(ak, options.attr[ak]);
+						}
+					}
+					if (options.cssText) el.style.cssText = options.cssText;
+					if (options.style) Object.assign(el.style, options.style);
+					if (options.css) Object.assign(el.style, options.css);
+					if (options.childs) {
+						if (options.childs instanceof Array) options.childs.filter(el => !!el).forEach(child => {
+							if (child instanceof HTMLElement) el.appendChild(child);
+							else if (child.hasOwnProperty('type') && child.hasOwnProperty('content')) {
+								switch (child.type) {
+									case 'html': {
+										arguments.callee('span', {
+											from: child.content,
+											append: el
+										});
+									}
+										break;
+									case 'style': {
+										const scoped = child.hasOwnProperty('scoped') && !!child.scoped;
+										arguments.callee('style', {
+											html: child.content,
+											append: el,
+											attr: {
+												scoped
+											}
+										});
+									}
+										break;
+									default:
+										el.appendChild(arguments.callee(child.type, child.content));
+								}
+							} else el.appendChild(document.createTextNode(child));
+						});
+						else if (options.childs instanceof HTMLElement) el.appendChild(options.childs);
+						else el.appendChild(document.createTextNode(options.childs));
+					}
+					if (options.classlist) {
+						if (options.classlist instanceof Array) options.classlist.forEach(classname => {
+							el.classList.add(classname);
+						});
+						else el.classList.add(...options.classlist.split(" "));
+					}
+					if (options.classList) {
+						if (options.classList instanceof Array) options.classList.forEach(classname => {
+							el.classList.add(classname);
+						});
+						else el.classList.add(...options.classList.split(" "));
+					}
+					if (options.on) {
+						for (let listenerName of Object.keys(options.on)) {
+							el.addEventListener(listenerName, options.on[listenerName]);
+						}
+					}
+					if (options.off) {
+						for (let listenerName of Object.keys(options.of)) {
+							el.removeEventListener(listenerName, options.off[listenerName]);
+						}
+					}
+					if (options.bind) {
+						const serverName = "$bindingserver" + Math.floor(Math.random() * 100000);
+						const bindings = CKTools.deepClone(options.bind);
+						const unbindProperty = (prop) => bindings[prop] = undefined;
+						const unbindAllProperties = () => el[serverName].disconnect();
+						el[serverName] = new MutationObserver(mutations => {
+							for (const mutation in mutations) {
+								if (bindings.hasOwnProperty(mutation.attributeName)) {
+									try {
+										bindings[mutation.attributeName]({
+											target: mutation.target,
+											attributeName: mutation.attributeName,
+											attributeNamespace: mutation.attributeNamespace,
+											oldValue: mutation.oldValue,
+											newValue: mutation.target.getAttribute(mutation.attributeName) || undefined,
+											unbind: () => unbindProperty(mutation.attributeName),
+											stopListen: () => (unbindAllProperties(), el[serverName] = undefined)
+										});
+									} catch (e) { }
+								}
+							}
+						});
+						el.addEventListener('DOMNodeRemoved', () => (unbindAllProperties(), el[serverName] = undefined));
+						el[serverName].observe(el, {
+							attributes: true,
+							attributeOldValue: true
+						});
+					}
+					if (options.append && options.append instanceof HTMLElement) options.append.appendChild(el);
+					if (options.insertBefore && insertBefore instanceof HTMLElement) options.insertBefore.parentNode.insertBefore(el, options.insertBefore);
+					if (options.insertAfter && insertAfter instanceof HTMLElement) options.insertAfter.parentNode.insertAfter(el, options.insertAfter);
+					if (options.init && options.init instanceof Function) options.init(el);
+					if (options.initAsync && options.initAsync instanceof Function) {
+						return options.initAsync(el).then(() => el);
+					}
+					return el;
+				}
+				static makeDom() {
+					console.warn('"makeDom" has been deprecated. Redirecting to "domHelper"...');
+					return CKTools.domHelper(...arguments);
+				}
+				static addDom(item) {
+					const make = (tag = 'div') => document.createElement(tag);
+					const txt = (it = '') => document.createTextNode(it);
+					class DOMItem {
+						constructor(it = '') {
+							this.setItem(it);
+						}
+						setItem(it = '') {
+							if (typeof it === 'string' || it instanceof String) {
+								this.el = txt(it);
+							} else if (it instanceof HTMLElement) {
+								this.el = it;
+							} else this.el = txt(it.toString());
+							if (!this.target) this.target = document.body;
+							this.mode = 'child';
+							return this;
+						}
+						inside(q = document.body) {
+							this.mode = 'child';
+							if (q instanceof HTMLElement) {
+								this.target = q;
+							} else if (typeof q === 'string' || q instanceof String) {
+								const ql = this.target.querySelector(q);
+								if (ql) this.target = ql;
+							}
+							return this;
+						}
+						after(a = null) {
+							this.mode = 'child-after';
+							if (a instanceof HTMLElement) {
+								this.after = a;
+							} else if (typeof a === 'string' || a instanceof String) {
+								const al = this.target.querySelector(a);
+								if (al) this.after = al;
+							}
+							return this;
+						}
+						before(a = null) {
+							this.mode = 'child-before';
+							if (a instanceof HTMLElement) {
+								this.before = a;
+							} else if (typeof a === 'string' || a instanceof String) {
+								const al = this.target.querySelector(a);
+								if (al) this.before = al;
+							}
+							return this;
+						}
+						done() {
+							switch (this.mode) {
+								case "child": {
+									if (this.el && this.target)
+										this.target.appendChild(this.el);
+								}
+									break;
+								case "child-before": {
+									if (this.el && this.target && this.before)
+										this.target.insertBefore(this.el, this.before);
+								}
+									break;
+								case "child-after": {
+									if (this.el && this.target && this.after)
+										this.target.insertBefore(this.el, this.after.nextSibling);
+								}
+									break;
+							}
+						}
+					}
+					return new DOMItem(item);
+				}
+				static deepClone(obj) {
+					let newObject = {};
+					if (Array.isArray(obj)) {
+						newObject = [];
+						for (let i = 0; i < obj.length; i++) {
+							newObject.push(CKTools.deepClone(obj[i]));
+						}
+						return newObject;
+					}
+					Object.keys(obj).map(key => {
+						if (typeof obj[key] === 'object') {
+							newObject[key] = CKTools.deepClone(obj[key]);
+						} else {
+							newObject[key] = obj[key];
+						}
+					});
+					return newObject;
+				}
+				static getCookie(name) {
+					const value = `; ${document.cookie}`;
+					const parts = value.split(`; ${name}=`);
+					if (parts.length === 2) return parts.pop().split(';').shift();
+				}
+				static clearAllCookies() {
+					return document.cookie.split(';').forEach(cookie => document.cookie = cookie.replace(/^ +/, '').replace(/=.*/, `=;expires=${new Date(0).toUTCString()};path=/`));
+				}
+				static getUrlParam(key) {
+					return (new URL(location.href)).searchParams.get(key);
+				}
+				static wait(ms) {
+					return new Promise(r => setTimeout(r, ms));
+				}
+				static async waitForDom(query, domparent = document, maxRetries = 20, gagms = 200) {
+					let i = maxRetries;
+					while (--i > 0) {
+						if (domparent.querySelector(query)) return true;
+						await CKTools.wait(gagms);
+					}
+					return false;
+				}
+				static async waitForAttribute(q, attr) {
+					let i = 50;
+					let value;
+					while (--i >= 0) {
+						if ((attr in q) &&
+							q[attr] != null) {
+							value = q[attr];
+							break;
+						}
+						await wait(100);
+					}
+					return value;
+				}
+				static async waitForPageVisible() {
+					if (document.hidden) return true;
+					return new Promise(r => {
+						const handler = () => {
+							r(true);
+							document.removeEventListener('visibilitychange', handler);
+						};
+						document.addEventListener("visibilitychange", handler)
+					});
+				}
+				static clearStyles(className = "injectedStyle") {
+					let dom = document.querySelectorAll("style." + className);
+					if (dom) [...dom].forEach(e => e.remove());
+				}
+				static addStyle(s, className = "injectedStyle", mode = "append", injectBase = document.head) {
+					switch (mode) {
+						default:
+						case "append":
+							break;
+						case "unique":
+							if (document.querySelector("style." + className)) return;
+							break;
+						case "update":
+							CKTools.clearStyles(className);
+							break;
+					}
+					let style = document.createElement("style");
+					style.classList.add(className);
+					style.innerHTML = s;
+					injectBase.appendChild(style);
+				}
+				// stackoverflow
+				static debounce(func, timeout = 300) {
+					let timer;
+					return (...args) => {
+						clearTimeout(timer);
+						timer = setTimeout(() => {
+							func.apply(this, args);
+						}, timeout);
+					};
+				}
+				static throttle(callback, limit) {
+					var waiting = false;
+					return function () {
+						if (!waiting) {
+							callback.apply(this, arguments);
+							waiting = true;
+							setTimeout(function () {
+								waiting = false;
+							}, limit);
+						}
+					}
+				}
+				static domContains(selector, text) {
+					var elements = document.querySelectorAll(selector);
+					return [].filter.call(elements, function (element) {
+						return RegExp(text).test(element.textContent);
+					});
+				}
+				static mapReplace(str, map) {
+					//reference: https://segmentfault.com/q/1010000023489916 answer-2
+					const replace = ({
+						str,
+						reg,
+						replacer
+					}) =>
+						str.replace(new RegExp(reg, 'g'), replacer);
+					return Object.keys(map).reduce((str, reg) => replace({
+						str,
+						reg,
+						replacer: map[reg]
+					}), str);
+				}
+				static padStart(num, count = 2) {
+					return (('' + Math.pow(10, count)).substr(1) + num).slice(-1 * Math.max(count, ('' + num).length));
+				}
+				static fixNum(num, fix = 0) {
+					return Math.floor(num * (Math.pow(10, fix))) / (Math.pow(10, fix));
+				}
+				static random = class {
+					static hex() {
+						return `#${Math.floor(Math.random() * 0xffffff).toString(16).padEnd(6, "0")}`;
+					}
+					static shuffleArray(arr) {
+						return arr.sort(() => 0.5 - Math.random());
+					}
+					static num(min, max) {
+						return Math.random() * (max - min) + min;
+					}
+					static fromArray(arr = []) {
+						return arr[Math.floor(CKTools.random.num(0, arr.length))];
+					}
+					static from(...args) {
+						return CKTools.random.fromArray(args);
+					}
+				}
+				static is = class {
+					static str(s) {
+						return (s != null && (typeof s === "string" || s instanceof String));
+					}
+					static elementInViewport(el) {
+						var rect = el.getBoundingClientRect();
+						return (
+							rect.top >= 0 &&
+							rect.left >= 0 &&
+							rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+							rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+						);
+					}
+					static asyncFn(fn) {
+						return fn.constructor.name === "AsyncFunction";
+					}
+					static darkMode() {
+						return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+					}
+				}
+				static modal = class {
+					static openModal(title = '', content) {
+						CKTools.modal.blockWindow();
+						let modal = CKTools.get("#CKTOOLS-modal");
+						if (!modal) modal = CKTools.modal.initModal();
+						modal.setTitle(title);
+						modal.setContent(content);
+						modal.show();
+					}
+					static isModalShowing() {
+						let modal = CKTools.get("#CKTOOLS-modal");
+						if (modal) return modal.classList.contains("show");
+						else return false;
+					}
+					static hideModal() {
+						CKTools.modal.blockWindow(false);
+						let modal = CKTools.get("#CKTOOLS-modal");
+						if (modal) modal.hide();
+					}
+					static initModal() {
+						CKTools.addStyle(`
+				#CKTOOLS-modal{
+					position: fixed;
+					z-index: 99010;
+					top: 50%;
+					left: 50%;
+					width: 300px;
+					width: 30vw;
+					/*height: 300px;
+					height: 50vh;*/
+					background: white;
+					border-radius: 8px;
+					padding: 12px;
+					transform: translate(-50%,-50%);
+					transition: all .3s;
+					box-shadow: 0 2px 8px grey;
+				}
+				#CKTOOLS-modal.show{
+					opacity: 1;
+					transform: translate(-50%,-50%) scale(1);
+				}
+				#CKTOOLS-modal.hide{
+					opacity: 0;
+					pointer-events: none;
+					transform: translate(-50%,-50%) scale(0.9);
+				}
+				.CKTOOLS-modal-title{
+					font-size: large;
+				}
+				.CKTOOLS-modal-content{
+					font-size: medium;
+				}
+				.CKTOOLS-modal-content>div{
+					display: flex;
+					margin: 6px 10px;
+					flex-wrap: wrap;
+					flex-direction: column;
+					align-content: space-around;
+					justify-content: space-between;
+					align-items: center;
+				}
+				.CKTOOLS-toolbar-btns{
+					flex: 1;
+					border: none;
+					background: #2196f3;
+					border-radius: 3px;
+					margin: 0 6px;
+					padding: 3px;
+					color: white;
+					box-shadow: 0 2px 3px grey;
+					min-width: 60px;
+				}
+				.CKTOOLS-toolbar-btns:hover{
+					filter: brightness(0.85);
+				}
+				`, "CKTOOLS-modal-css", "unique");
+						const modal = document.createElement("div");
+						modal.id = "CKTOOLS-modal";
+						modal.className = "hide";
+
+						const header = document.createElement("h2");
+						header.className = "CKTOOLS-modal-title"
+						modal.appendChild(header);
+
+						modal.setTitle = (t = '') => {
+							header.innerHTML = t;
+						}
+
+						const contents = document.createElement("div");
+						contents.className = "CKTOOLS-modal-content";
+						modal.appendChild(contents);
+
+						modal.setContent = async (c) => {
+							let ct = c;
+							if (ct instanceof Function) {
+								ct = await ct();
+							}
+							if (ct instanceof HTMLElement) {
+								contents.innerHTML = '';
+								contents.appendChild(ct);
+								return;
+							}
+							if (typeof (ct) === "string") {
+								contents.innerHTML = ct;
+								return;
+							}
+							console.log("unknown: ", ct);
+						}
+						modal.addContent = async (c) => {
+							let ct = c;
+							if (ct instanceof Function) {
+								ct = await ct();
+							}
+							if (ct instanceof HTMLElement) {
+								contents.appendChild(ct);
+								return;
+							}
+							if (ct instanceof String) {
+								contents.innerHTML += ct;
+								return;
+							}
+							console.log("unknown: ", ct);
+						}
+
+						modal.close = CKTools.modal.closeModal;
+						modal.open = CKTools.modal.openModal;
+						modal.show = () => {
+							modal.className = "show";
+						}
+						modal.hide = () => {
+							modal.className = "hide";
+						}
+
+						document.body.appendChild(modal);
+						return modal;
+					}
+					static closeModal() {
+						CKTools.modal.blockWindow(false);
+						let modal = CKTools.get("#CKTOOLS-modal");
+						if (modal) modal.remove();
+					}
+					static async alertModal(title = "", content = "", okbtn = null) {
+						if (CKTools.modal.isModalShowing()) {
+							CKTools.modal.hideModal();
+							await CKTools.wait(200);
+						}
+						CKTools.modal.openModal(title, await CKTools.domHelper("div", async container => {
+							container.appendChild(await CKTools.domHelper("div", tip => {
+								tip.innerHTML = content;
+							}))
+							if (okbtn !== null)
+								container.appendChild(await CKTools.domHelper("div", async btns => {
+									btns.style.display = "flex";
+									btns.appendChild(await CKTools.domHelper("button", btn => {
+										btn.className = "CKTOOLS-toolbar-btns";
+										btn.innerHTML = okbtn;
+										btn.onclick = e => CKTools.modal.hideModal();
+									}))
+								}))
+						}))
+						await CKTools.wait(300);
+					}
+					static blockWindow(block = true) {
+						CKTools.addStyle(`
+				#CKTOOLS-blockWindow{
+					z-index: 99005;
+					display: block;
+					background: #00000080;
+					opacity: 0;
+					transition: all .3s;
+					position: fixed;
+					left: 0;
+					top: 0;
+					width: 100vw;
+					height: 100vh;
+				}
+				#CKTOOLS-blockWindow.hide{
+					pointer-events: none;
+					opacity: 0;
+				}
+				#CKTOOLS-blockWindow.show{
+					opacity: 1;
+				}
+				`, "CKTOOLS-blockWindow-css", "unique");
+						let dom = CKTools.get("#CKTOOLS-blockWindow");
+						if (!dom) {
+							dom = document.createElement("div");
+							dom.id = "CKTOOLS-blockWindow";
+							dom.className = "hide";
+							document.body.appendChild(dom);
+						}
+						if (block) {
+							dom.className = "show";
+						} else {
+							dom.className = "hide";
+						}
+					}
+				}
+
+				static EventEmitter = class {
+					handlers = {};
+					on(name, func) {
+						if (!(func instanceof Function)) throw "Param must be func!";
+						if (!(name in this.handlers)) {
+							this.handlers[name] = [];
+						}
+						this.handlers[name].push(func);
+					}
+					off(name, func) {
+						if (!(func instanceof Function)) throw "Param must be func!";
+						if (name in this.handlers) {
+							for (let i = 0; i < this.handlers[name].length; i++) {
+								if (this.handlers[name][i] === func) {
+									this.handlers[name].splice(i, 1);
+									i--;
+								}
+							}
+						}
+					}
+					clean(name) {
+						if (name in this.handlers) {
+							this.handlers[name] = [];
+						}
+					}
+					emit(name, ...args) {
+						if (name in this.handlers) {
+							for (let func of this.handlers[name]) {
+								try {
+									func(...args);
+								} catch (e) {
+									console.error('ERROR:', e);
+								}
+							}
+						}
+					}
+				}
+				static HoldClick = class {
+					dom;
+					emitter = new CKTools.EventEmitter;
+					downTime = 0;
+					holdingTime = 250;
+					mouseDown = false;
+
+					constructor(dom, holdingTime = 250) {
+						this.bind(dom);
+						this.holdingTime = holdingTime;
+					}
+
+					bind(dom) {
+						if (this.dom) {
+							this.unregListeners();
+						}
+						if (dom instanceof HTMLElement) {
+							this.dom = dom;
+							this.initListener();
+						}
+					}
+
+					onclick(func) {
+						this.emitter.on("click", func);
+						return this;
+					}
+
+					onhold(func) {
+						this.emitter.on("hold", func);
+						return this;
+					}
+
+					onup(func) {
+						this.emitter.on("up", func);
+						return this;
+					}
+
+					offclick(func) {
+						this.emitter.off("click", func);
+						return this;
+					}
+
+					offhold(func) {
+						this.emitter.off("hold", func);
+						return this;
+					}
+
+					offup(func) {
+						this.emitter.off("up", func);
+						return this;
+					}
+
+					resetCallback(name = "all") {
+						const allEv = ["click", "hold", "up"];
+						if (name === "all") {
+							allEv.forEach(e => this.emitter.clean(e));
+						} else if (allEv.includes(name)) {
+							this.emitter.clean(name);
+						}
+					}
+
+					unregListeners() {
+						this.dom.removeEventListener("mouseup", this.handleMouseUp.bind(this));
+						this.dom.removeEventListener("mousedown", this.handleMouseDown.bind(this));
+						this.dom.removeEventListener("mouseout", this.handleMouseOut.bind(this));
+					}
+
+					uninstall() {
+						this.resetCallback();
+						this.unregListeners();
+					}
+
+					handleMouseDown(e) {
+						if (e.button !== 0 && e.button !== 1) return;
+						e.preventDefault();
+						this.mouseDown = true;
+						this.downTime = (new Date()).getTime();
+						setTimeout(() => {
+							if (this.mouseDown) {
+								console.log(this);
+								this.mouseDown = false;
+								this.downTime = 0;
+								this.emitter.emit("hold", e);
+							}
+						}, this.holdingTime)
+					}
+
+					handleMouseUp(e) {
+						if (e.button !== 0 && e.button !== 1) return;
+						e.preventDefault();
+						if (this.mouseDown) {
+							this.mouseDown = false;
+							const currTime = (new Date).getTime();
+							if ((currTime - this.downTime) >= this.holdingTime) {
+								this.emitter.emit("hold", e);
+							} else {
+								this.emitter.emit("click", e);
+							}
+							this.downTime = 0;
+						}
+						this.emitter.emit("up", e);
+					}
+
+					handleMouseOut(e) {
+						e.preventDefault();
+						if (this.mouseDown) {
+							this.mouseDown = false;
+							this.downTime = 0;
+							this.emitter.emit("hold", e);
+						}
+					}
+
+					initListener() {
+						this.dom.addEventListener("mouseup", this.handleMouseUp.bind(this))
+						this.dom.addEventListener("mousedown", this.handleMouseDown.bind(this))
+						this.dom.addEventListener("mouseout", this.handleMouseOut.bind(this))
+					}
+				}
+				static dragger = class {
+					static defaultHandler(val) {
+						return console.log("DRAG:", val);
+					}
+					static async waitForDragger(waitStatus = true) {
+						while (CKTools.dragger.dragging !== waitStatus) await CKTools.wait(10);
+						return CKTools.dragger;
+					}
+					static async regHandler(func) {
+						if (!(func instanceof Function)) throw "Param must be a func!";
+						await CKTools.dragger.waitForDragger(false);
+						CKTools.dragger.handler = func;
+						return CKTools.dragger;
+					}
+					static handler() { }
+					static dragging = false;
+					static initialDragData = {
+						x: 0,
+						y: 0
+					}
+					static lastDragData = {
+						x: 0,
+						y: 0
+					}
+					static startDrag(e) {
+						if (CKTools.dragger.dragging) return;
+						CKTools.dragger.dragging = true;
+						console.log(CKTools.dragger.initialDragData);
+						CKTools.dragger.initialDragData.x = e.screenX;
+						CKTools.dragger.initialDragData.y = e.screenY;
+						CKTools.dragger.lastDragData.x = e.screenX;
+						CKTools.dragger.lastDragData.y = e.screenY;
+						document.body.addEventListener("mouseup", CKTools.dragger.stopDrag);
+						document.body.addEventListener("mousemove", CKTools.dragger.handleDrag);
+						console.info("DRAG:", "Start Drag");
+						return CKTools.dragger;
+					}
+					static handleDrag(e) {
+						const currPos = {
+							x: e.screenX,
+							y: e.screenY
+						};
+						const initPos = CKTools.dragger.initialDragData;
+						const delta = {
+							x: initPos.x - currPos.x,
+							y: initPos.y - currPos.y
+						}
+						const lastdelta = {
+							x: CKTools.dragger.lastDragData.x - currPos.x,
+							y: CKTools.dragger.lastDragData.y - currPos.y
+						}
+						CKTools.dragger.lastDragData = currPos;
+						CKTools.dragger.handler(delta, lastdelta);
+					}
+					static stopDrag() {
+						document.body.removeEventListener("mouseup", CKTools.dragger.stopDrag);
+						document.body.removeEventListener("mousemove", CKTools.dragger.handleDrag);
+						CKTools.dragger.handler = CKTools.dragger.defaultHandler;
+						console.info("DRAG:", "Stop Drag");
+						CKTools.dragger.dragging = false;
+						return CKTools.dragger;
+					}
+				}
+				static GUID = class {
+					static S4() {
+						return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+					}
+					static get() {
+						let S4 = CKTools.GUID.S4;
+						return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
+					}
+					static getShort() {
+						let S4 = CKTools.GUID.S4;
+						return (S4() + S4() + S4() + S4());
+					}
+				}
+			}
+			window.CKTools = CKTools;
+		})();
+	</script>
+	<style class="showav_dragablecss">
+		#CKTOOLS-modal {
+			width: fit-content !important;
+			max-width: 80% !important;
+		}
+
+		.CKTOOLS-modal-content li label b {
+			color: green !important;
+		}
+
+		.CKTOOLS-modal-content li label span {
+			color: red !important;
+		}
+
+		.showav_menuitem {
+			line-height: 2em;
+			width: 100%;
+			transition: all .3s;
+			cursor: pointer;
+		}
+
+		.showav_menuitem:hover {
+			transform: translateX(6px);
+		}
+
+		.showav_menuitem>label {
+			font-weight: bold;
+			font-size: large;
+			display: block;
+		}
+	</style>
+	<style class="showav_css_patch">
+		#CKTOOLS-modal li,
+		#CKTOOLS-modal ul {
+			list-style: none !important;
+		}
+	</style>
+</head>
+
+<body style="">
+	<div class="uk-sticky-placeholder" style="height: 0px; width: 0px; margin: 0px;"></div>
+	<header uk-sticky="sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky"
+		class="uk-sticky uk-sticky-fixed uk-sticky-below" style="position: sticky; top: 0px;">
+		<nav class="uk-navbar-container frostingGlass uk-navbar uk-navbar-sticky" uk-navbar="" style="">
+			<div class="uk-navbar-left uk-overflow-hidden">
+				<ul class="uk-navbar-nav uk-margin-small-left uk-margin-small-right">
+					<li>
+						<button id="nav_home" class="uk-icon-button uk-icon" uk-icon="home" type="button">
+							<svg width="20" height="20" viewBox="0 0 20 20">
+								<polygon points="18.65 11.35 10 2.71 1.35 11.35 0.65 10.65 10 1.29 19.35 10.65">
+								</polygon>
+								<polygon points="15 4 18 4 18 7 17 7 17 5 15 5"></polygon>
+								<polygon
+									points="3 11 4 11 4 18 7 18 7 12 12 12 12 18 16 18 16 11 17 11 17 19 11 19 11 13 8 13 8 19 3 19">
+								</polygon>
+							</svg>
+						</button>
+					</li>
+					<li id="nav_title" class="uk-navbar-item uk-text-nowrap uk-overflow-hidden">缘起法是唯一的真理</li>
+				</ul>
+			</div>
+		</nav>
+	</header>
+
+	<main class="uk-container uk-container-xsmall" style="margin-bottom: 0px;">
+		<h1 id="title" class="uk-text-center songti" style="margin-bottom: 80px;margin-top: 0px;">缘起法是唯一的真理</h1>
+		<article class="cbeta">
+			<div id="body">
+				<div class="uk-text-center" style="margin-top: 40px; margin-bottom: 40px;">
+					<img class="img-width-80" src="./jpg/1.jpg">
+				</div>
+				<div class="uk-text-center" style="margin-top: 40px; margin-bottom: 40px;">
+					<audio src="./m4a/缘起法是唯一的真理.m4a" controls></audio>
+				</div>
+				<div class="div-jing">
+					<p class="">&emsp;&emsp;各位家人们，“早安南山，幸福答疑”，那么我们有家人提出了什么是“缘起法”？</p>
+					<p class="">&emsp;&emsp;这个“缘起法”我觉得有一首偈子就是在《浴佛功德经》里也讲了，在《大智度论》里面，也提到了这首偈子，就是马胜比丘看到外道，外道看到马胜比丘非常庄严、气质不凡，就问:“你的师父是谁呀？他讲了什么法呀？”马胜比丘说:</p>
+					<p class="">&emsp;&emsp;“诸法因缘生，诸法因缘灭，我佛大沙门，常作如是说。”</p>
+					<p class="">&emsp;&emsp;还有一首偈子叫：</p>
+					<p class="">&emsp;&emsp;“诸法缘生，生灭灭已，寂灭为乐，是我大沙门说。”</p>
+					<p class="">&emsp;&emsp;所以这两首偈子可以表现出一点，就说是“缘起法”实际上在讲人的这个轮回，或者人的这个苦，或者人在世界上的整个的一个认知。</p>
+					<p class="">&emsp;&emsp;佛教之所以不信仰鬼神，一般说佛教是无神论，我们不是说世界上没有鬼神，没有这个鬼啊神啊什么的。我们是讲，鬼神是存在这个世界上的，但是，我们是讲缘起的。就是鬼神存在这个世界也好，万物万事也好，它是有“缘起的”——有因缘而生起的一个现象。</p>
+					<div class="uk-text-center" style="margin-top: 40px; margin-bottom: 40px;">
+						<img class="img-width-80" src="./jpg/2.jpg">
+					</div>
+					<p class="">&emsp;&emsp;比如说，中国大家很熟悉的道教，道教最高的神祇呢，是玉皇大帝，在玉皇大帝之前是谁呢？道教里面又供“三清”，那是“三清”最大呢还是玉皇大帝最大？谁管谁？这个里面都是有一定的缘起的。可能很多人觉得很矛盾，那道教玉皇大帝最大，为什么道教都拜“三清”呢？那“三清”如果最大，那玉皇大帝是听“三清”的，还是“三清”听玉皇大帝的？对吧？所以，这个有时候连道教徒也讲不清楚。</p>
+					<p class="">&emsp;&emsp;很多人，比如说是佛教徒学佛，我们讲一切都是“缘起”：</p>
+					<p class="">&emsp;&emsp;以佛为信仰，佛是觉者；他说的“法”是道路；那么他的圣弟子是我们的老师。我们以三宝为信仰，不信仰鬼神，不以鬼神为崇拜。</p>
+					<p class="">&emsp;&emsp;但是我们还去供养鬼神，为什么？我们供养鬼神的目的就是培养这个“缘起法”，既然大家都承认他，那么，第一，就是有教育的价值；第二，通过教育的价值让大家培养一个因缘。不管鬼神存在不存在，我们是通过（供养）鬼神的这个过程给大家培养了缘起，也就是让大家往良善的方向去发展。</p>
+					<div class="uk-text-center" style="margin-top: 40px; margin-bottom: 40px;">
+						<img class="img-width-80" src="./jpg/3.jpg">
+					</div>
+					<p class="">&emsp;&emsp;我觉得这个已经不存在于宗教或者不宗教了。就是宗教之所以存在的目的是让大家还能找到最初的那个良性循环。所以一般我们称宗教为“人天宗教”，什么意思？无非就是讲人的善恶和天神的宽裕和惩罚。无非就是从地上的善恶到天上的善恶。再到善恶最后从人间剥离出来以后，还有个死了以后，“好人生天上去，坏人下地下去”，还是天上和地下的事，无非中间就把人给分了。以人为中心，又分出了天和地，那地是受苦的地方，天是神主宰的地方，这都是缘起，这都是教“与人为善”的。</p>
+					<p class="">&emsp;&emsp;所以孔子说过一句话说：“立教而育明教化也”，什么意思？所有宗教立神祇的目的是为了教化老百姓。所以我们经常说法律这么严格，大家同样犯罪，但是有信仰的人，他犯罪率就会低很多，因为他知道他要往哪里走。</p>
+					<div class="uk-text-center" style="margin-top: 40px; margin-bottom: 40px;">
+						<img class="img-width-80" src="./jpg/4.jpg">
+					</div>
+					<p class="">&emsp;&emsp;就是给大家生活当中，更多的是通过宗教来唤醒你的良知，所以这个是很重要的，很重要的！所以宗教之所以存在，它的价值就是让大家还能够保持良知的、善良的、友爱的发展。</p>
+					<p class="">&emsp;&emsp;那佛教呢，它称为宗教，但它已经超越了宗教。已经超越了信神，或者佛并没有说这个世界是他创造的，佛说这个世界是有因缘生法。唯物主义讲的呢，这一切都是人类的创造。对呀，佛一直在以人为本在说，所以佛教在人天。</p>
+					<p class="">&emsp;&emsp;这个“缘起法”也是这样的。就是佛教讲，一切都是因缘所造化。就是说，比如你要来到人间，首先你得有人道的种子，对吧？五戒是人道的种子。你要升天的，十戒是升天的种子。所有的宗教范围都离不开十善的范围。都是这样讲的。你像菩萨就有菩萨戒，到了佛那儿就有三昧耶果海，三昧耶誓言，对吧？它不同的层次，它有不同的戒，戒的目的，戒律就是让你：</p>
+					<p class="">&emsp;&emsp;诸恶莫做，众善奉行，</p>
+					<p class="">&emsp;&emsp;自净其意，是诸佛教。</p>
+					<p class="">&emsp;&emsp;就是碰到任何事以后，先从自己净化了以后，你逐步地去净化大家就很容易。有时候你自己不去，先从自己的本身的立场去出发，去净化自己，你去先让大家净化，有时候有一定的难度。所以，有时候我看到袁崇焕居士说过一句话，他说：“我能度众生，而不能度枕边人”。他能度很多人，他度不了他老婆。他老婆每天知道他的起居，他老婆就盯着他那个缺点看。</p>
+					<p class="">&emsp;&emsp;所以佛教讲任何缘起，他都是从因、缘、果、报来的。所以“因”是开始；“缘”是给你时间空间；完了以后，“果”就是成熟显现出来，最后你感受到苦就叫“报”。但因、缘、果、报所有的开始，就是从“老死、识、灭，…”，这十二个因缘里面讲，但是这个里面好像是讲的比较复杂，所以有机会的话，我们会把这十二个因缘，就从认知的角度来说，把这十二个因缘来分享给大家。</p>
+					<p class="">&emsp;&emsp;所以，这个人天佛教主要有三部分构成，就是六入、六尘、六识十八界构成的，所以“缘起法”是佛教一直在讲的，因为如果佛教脱开这个“缘起法”，它没办法成立，所以你信仰佛教得信仰“缘起法”。就是“无明”——你的烦恼从哪里来的？你也不知道，无明、老、死、……，很多一系列的这个范畴他就会来。</p>
+					<div class="uk-text-center" style="margin-top: 40px; margin-bottom: 40px;">
+						<img class="img-width-80" src="./jpg/5.jpg">
+					</div>
+					<p class="">&emsp;&emsp;所以有机会我们再把这个“十二因缘”好好的学一下，而且这个“十二因缘”也是我们认知这个世间轮回的物质精神的一个很重要的平台。就是人之所以苦就是烦恼，烦恼出于无明，无明出老死，老死出很多十二个环节，它逐步逐步逐步……。</p>
+					<p class="">&emsp;&emsp;所以，罗汉解脱就是以四圣谛“声闻”法为主。那么“独觉”呢，是以“十二因缘”为主。就是如果有佛出世的话，通过闻法解脱的叫阿罗汉；没有佛出世的话，很多人从认识烦恼开始，逐步通过十二件法来认识这个宇宙的人，就称为“独觉”。</p>
+					<p class="">&emsp;&emsp;“有佛出世是罗汉，无佛出世是独觉”。所以这个“十二因缘”就是称为自然法，就是有佛出世或者没佛出世，它这十二个因缘都是在的，只是很多人没有把它串联起来，形成一个概念和体系，来解释你自己的这个烦恼的现象、这个社会的现象、这个宇宙的现象。最后佛把它提出了，或者是在佛以前也是有这个十二因缘的，是“独觉”提出来的，我们称为“独觉佛”、或者称为“独觉者”。就是声闻、罗汉、独觉嘛。</p>
+					<p class="">&emsp;&emsp;通过声音，闻法解脱的称为罗汉；通过大自然的，通过烦恼开始体悟的，叫“缘觉”。“缘觉”不一定是佛教徒，他悟到“十二因缘”的，悟到自我烦恼的东西是无明、老、死、……，这些东西造成的，从思考人生造成的这个事的这个哲学态度，那他就是“缘觉”。</p>
+					<p class="">&emsp;&emsp;所以，这个“十二因缘”法不是佛法独有的，它称为十二因缘，是不管有没有佛教它都存在的真理。</p>
+					<div class="uk-text-center" style="margin-top: 40px; margin-bottom: 40px;">
+						<img class="img-width-80" src="./jpg/6.jpg">
+					</div>
+					<p class="">导师开示</p>
+					<p class="">慈念文宣组整理</p>
+				</div>
+			</div>
+		</article>
+		<div class="dp-button-row uk-margin-large"></div>
+	</main>
+
+	<script src="../../js_css_files/jquery.min.js"></script>
+	<script src="../../js_css_files/uikit-core.min.js"></script>
+	<script src="../../js_css_files/uikit-icons.min.js"></script>
+	<script src="../../js_css_files/Bacon.min.js"></script>
+	<script src="../../js_css_files/qrcode.min.js"></script>
+	<script src="../../js_css_files/reader.2rssur4x7b79pf.js"></script>
+	<script async="" defer="defer" data-domain="" src="https://plausible.io/js/plausible.js"></script>
+	<script>window.plausible = window.plausible || function () { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
+	<div id="like996_identification"
+		style="background-color: rgba(211, 211, 211, 0.86); align-items: center; justify-content: center; position: fixed; color: black; top: -5em; height: 2em; margin: 0em; padding: 3px 0em 0em; font-size: 20px; width: 100%; left: 0px; right: 0px; text-align: center; z-index: 2147483647; display: none;">
+		Text.</div>
+</body>
+
+</html>
