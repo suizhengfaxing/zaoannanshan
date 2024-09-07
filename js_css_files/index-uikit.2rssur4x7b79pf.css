@@ -165,7 +165,13 @@ main #title_search h1.uk-heading-hero {
     letter-spacing: .12rem
 }
 
-@media (min-width:360px) {
+@media (min-width:370px) {
+    main #title_search h1.uk-heading-hero {
+        font-size: 2.2rem
+    }
+}
+
+@media (min-width:520px) {
     main #title_search h1.uk-heading-hero {
         font-size: 3rem
     }
@@ -318,7 +324,7 @@ main .work-list>section .uk-card h3.uk-card-title {
     font-family: Tinos, "Hiragino Mincho ProN", "Source Han Serif", "Source Han Serif TC", "Noto Serif CJK", "Noto Serif TC", "Noto Serif SC", Songti, "LiSong Pro", "Apple LiSung", "新細明體", "新细明体", PMingLiU, "細明體", "细明体", MingLiU, HanaMinA, HanaMinB, HanaMinC, "Hanazono Mincho A", "Hanazono Mincho B", "Hanazono Mincho C", Jomolhari, serif;
     font-style: normal !important;
     font-weight: 700;
-    font-size: 2.2rem
+    font-size: 1.4rem
 }
 
 main .work-list>section .uk-card p {
